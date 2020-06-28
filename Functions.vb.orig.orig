@@ -1,0 +1,1934 @@
+﻿Module Functions
+
+#Region "Constants"
+
+    Public Const SigmaPT As Single = 1.26
+    Public Const Sigma As Single = 0.0000000567
+    Public Const Esoil As Single = 0.978
+    Public Const Eveg As Single = 0.985
+    Public Const Gravity As Single = 9.81
+    Public Const K As Single = 0.41 'von Karman Constant
+
+#End Region
+
+#Region "Enumerations"
+
+    Enum Cover
+        Water
+        Agriculture
+        Alfalfa
+        Wheat
+        Arrowweed
+        Arundo
+        Bare_Soil
+        Barren
+        Cheat_Grass_and_Other_Weeds
+        Conifer
+        Corn
+        Cotton
+        Cottonwood
+        Dead_Tamarisk
+        Desert_Shrubs
+        Dryland_Cotton
+        Grass
+        Mesophytes
+        Mesquite
+        Sand_and_Gravel
+        Soybean
+        Tamarisk
+        Unclassified
+        Upland_Bushes
+        Upland_Vegetation
+        Upland_Vegetation2
+        Vegetated_Decadent
+        Cashew
+        Citrus
+        Guava
+        Coconut
+        Grapes
+        Watermelon
+        Pineapple
+        Banana
+        Graviola
+        Sapoti
+        Acerola
+        Sabia
+        Mango
+        Cashew_Giant
+        Cashew_Early
+        Mata
+        Papaya
+        Lemon
+        Tangerine
+        Orange
+        Passion_Fruit
+        Banana_Apple
+        Mixed_Forest_1
+        Mixed_Forest_2
+    End Enum
+
+    Enum ImageSource
+        Airborn
+        LandSAT
+        MODIS
+        GOES
+        AVHRR
+    End Enum
+
+    Enum EnergyBalance
+        One_Layer
+        Two_Source
+        SEBAL_Idaho
+        Existing_Point
+        Existing_Grid
+    End Enum
+
+    Enum WaterBalance
+        Crop_Coefficient_Point
+        Crop_Coefficient_Grid
+    End Enum
+
+    Enum DataAssimilation
+        No_Assimilation
+        Single_Weight
+        Time_Varying_Weight
+        Nudging
+    End Enum
+
+    Enum Surface
+        Canopy
+        Soil
+    End Enum
+
+    Enum Stability
+        Stable
+        Neutral
+        Unstable
+    End Enum
+
+    Enum IrrigationMethod
+        Basin
+        Border
+        Drip
+        Furrow_Narrow_Bed
+        Furrow_Narrow_Bed_Alternating
+        Furrow_Wide_Bed
+        Furrow_Wide_Bed_Alternating
+        Not_Irrigated
+        Sprinkler
+    End Enum
+
+    Enum ETExtrapolation
+        Evaporative_Fraction
+        Reference_Evapotranspiration
+    End Enum
+
+#End Region
+
+#Region "Functions"
+
+    ''' <summary>
+    ''' Calculates fraction of vegetation cover
+    ''' </summary>
+    ''' <param name="Cover">Land Cover Classification</param>
+    ''' <param name="NDVI">Normalized Difference Vegetation Index</param>
+    ''' <param name="SAVI">Soil Adjusted Vegetation Index</param>
+    ''' <returns>Vegetation fraction of cover</returns>
+    ''' <remarks></remarks>
+
+    Function calcFc(ByVal Cover As Cover, ByVal NDVI As Single, ByVal SAVI As Single, ByVal LAI As Single) As Single
+        Dim Fc As Single = 0
+        If Cover = Functions.Cover.Soybean Then
+            Cover = Cover
+        End If
+        Select Case Cover
+            Case Functions.Cover.Wheat
+                Fc = 1.19 * NDVI - 0.16
+            Case Functions.Cover.Arrowweed Or Functions.Cover.Tamarisk Or Functions.Cover.Dead_Tamarisk
+                Fc = 1.72 * NDVI - 0.15
+                Fc = 1.85 * NDVI - 0.08
+                'Fc = ((NDVI - 0.1) / (0.89 - 0.1)) ^ 2
+            Case Else
+                If NDVI <= 0.1 Then
+                    Fc = 0.063
+                ElseIf NDVI > 0.1 And NDVI < 0.9 Then
+                    Fc = ((NDVI - 0.1) / (0.9 - 0.1)) ^ 2
+                    'Fc = 1 - ((0.9 - NDVI) / (0.9 - 0.1)) ^ (0.6)
+                ElseIf NDVI >= 0.9 Then
+                    Fc = 0.95
+                End If
+
+        End Select
+        'fcover = ((ndvip - 0.1) / (0.89 - 0.1)) ^ 2
+        'fc = (savip - 0.1) / (0.75 - 0.1)      '----need to be checked
+        'fcover = 1 - ((0.85 - ndvip) / (0.85 - 0.1)) ^ (0.6)
+        'fcover = 1.8 * ndvip - 0.08 'Nagler 2009
+        'fcover = 1 - Exp(-cveg * laip)
+        'fcover = 1.72 * ndvip - 0.15
+        'End If
+        'If luid = TamaID Then
+        'fcover = 1.8 * ndvip - 0.08
+        'End If
+
+        ''''trying the LAI approach
+        If Not LAI = 0 Then
+            Fc = 1 - Math.Exp(-0.5 * LAI)
+        End If
+
+        Return Limit(Fc, 0.063, 0.95)
+    End Function
+
+    Function calcNDVI(ByVal Red As Single, ByVal NIR As Single) As Single
+        Return (NIR - Red) / (NIR + Red)
+    End Function
+
+    Function calcNDWI(ByVal MIR1 As Single, ByVal NIR As Single) As Single
+        Return (NIR - MIR1) / (NIR + MIR1)
+    End Function
+
+    Function calcSAVI(ByVal Red As Single, ByVal NIR As Single) As Single
+        Return Math.Min(1.5 * (NIR - Red) / (NIR + Red + 0.5), 0.76)
+    End Function
+
+    Function calcOSAVI(ByVal Red As Single, ByVal NIR As Single) As Single
+        Return 1.16 * (NIR - Red) / (NIR + Red + 0.16)
+    End Function
+
+    Function calcAlbedo(ByVal Red As Single, ByVal NIR As Single) As Single
+        Return 0.512 * Red + 0.418 * NIR
+    End Function
+
+    Function calcZenithClumping(ByVal NDVI As Single, ByVal SunZenith As Single, ByVal ViewZenith As Single, ByVal LAI As Single, ByVal Hc As Single, ByVal Cveg As Single, ByVal Fc As Single, ByVal Cover As Cover, ByRef Bioproperties As Bioproperties) As Clumping_Output
+        'Bioproperties.Wc As Single = 0
+        'Select Case Cover
+        '    Case Functions.Cover.Corn
+        '        Wc = 0.76
+        '    Case Functions.Cover.Soybean
+        '        Wc = 0.25
+        '    Case Functions.Cover.Tamarisk
+        '        Wc = 0
+        '    Case Functions.Cover.Cotton, Functions.Cover.Dryland_Cotton
+        '        Wc = 0.76
+        '    Case Functions.Cover.Wheat
+        '        Wc = 0
+        'End Select
+        Dim Output As New Clumping_Output
+
+        Dim k_Clump As Single = -2.2
+        Dim fGap As Single = Math.Exp(-Cveg * (LAI / Fc) / Math.Cos(ViewZenith))
+        Dim p_Clump As Single = 0
+        Dim D As Single = 0
+        If Bioproperties.Wc = 0 Or Cover = Functions.Cover.Bare_Soil Or Cover = Functions.Cover.Sand_and_Gravel Or Fc <= 0.0631 Or LAI <= 0.1 Then
+            'p_Clump = 3.8 - 0.46 * 2
+            Output.Clump0 = 1
+            Output.ClumpSun = 1
+            Output.ClumpView = 1
+        Else
+            If Bioproperties.Wc = 0 Then ' for cases where we don't know the width of clumps
+                D = 2
+            Else
+                D = Hc / Bioproperties.Wc
+            End If
+
+            p_Clump = 3.8 - 0.46 * D 'or 3.34
+            Output.Clump0 = (Math.Log(1 - Fc + Fc * fGap)) * Math.Cos(ViewZenith) / (-Cveg * LAI)
+            Output.ClumpView = Output.Clump0 / (Output.Clump0 + (1 - Output.Clump0) * Math.Exp(k_Clump * (ViewZenith * Math.PI / 180) ^ p_Clump))
+            Output.ClumpSun = Output.Clump0 / (Output.Clump0 + (1 - Output.Clump0) * Math.Exp(k_Clump * (SunZenith * Math.PI / 180) ^ p_Clump))
+        End If
+
+        Return Output
+    End Function
+
+    Function calcFtheta(ByVal ClumpView As Single, ByVal LAI As Single, ByVal Cveg As Single, ByVal ViewZenith As Single) As Single
+        Dim Ftheta As Single = Math.Min(1 - Math.Exp(-Cveg * ClumpView * LAI / Math.Cos(ViewZenith * Math.PI / 180)), 0.95)
+        Return Ftheta
+        If Ftheta = 0 Then
+            Ftheta = Ftheta
+        End If
+    End Function
+
+    Function calcG(ByVal Rn As Single, ByVal LAI As Single, ByVal Cover As Cover) As Single
+        Select Case Cover
+            Case Functions.Cover.Tamarisk, Functions.Cover.Dead_Tamarisk
+                Return (0.09 - 0.015 * LAI) * Rn  ' for Tamarisck
+            Case Else
+                Return ((0.3324 + (-0.024 * LAI)) * (0.8155 + (-0.3032 * Math.Log(Math.Abs(LAI))))) * Rn
+        End Select
+    End Function
+
+    Function calcHcAir(ByVal NDVI As Single, ByVal NDWI As Single, ByVal SAVI As Single, ByVal OSAVI As Single, ByVal Fc As Single, ByVal Cover As Cover) As Single
+        Dim Hc As Single = 0
+        Select Case Cover
+            Case Functions.Cover.Agriculture
+
+            Case Functions.Cover.Alfalfa
+
+            Case Functions.Cover.Corn
+                Hc = (1.86 * OSAVI - 0.2) * (1 + 0.000000482 * Math.Exp(17.69 * OSAVI))
+            Case Functions.Cover.Soybean
+                Hc = (0.55 * OSAVI - 0.02) * (1 + 0.0000998 * Math.Exp(9.52 * OSAVI))
+            Case Functions.Cover.Tamarisk, Functions.Cover.Dead_Tamarisk, Functions.Cover.Upland_Bushes, Functions.Cover.Upland_Vegetation, Functions.Cover.Upland_Vegetation2
+
+
+            Case Functions.Cover.Cotton, Functions.Cover.Dryland_Cotton
+
+            Case Functions.Cover.Arrowweed
+
+            Case Functions.Cover.Grass, Functions.Cover.Cheat_Grass_and_Other_Weeds
+
+            Case Functions.Cover.Bare_Soil, Functions.Cover.Sand_and_Gravel
+
+        End Select
+
+        Return Limit(Hc, 0.1, 6)
+    End Function
+
+    Function calcLAIAir(ByVal NDVI As Single, ByVal SAVI As Single, ByVal oSAVI As Single, ByVal Cover As Cover, ByVal Fc As Single) As Single
+        Dim LAI As Single = 0
+
+        Select Case Cover
+            Case Functions.Cover.Corn, Functions.Cover.Soybean
+                LAI = (4 * oSAVI - 0.8) * (1 + 0.00000473 * Math.Exp(15.64 * oSAVI))
+            Case Functions.Cover.Tamarisk, Functions.Cover.Dead_Tamarisk, Functions.Cover.Upland_Bushes, Functions.Cover.Upland_Vegetation, Functions.Cover.Upland_Vegetation2
+                'lai =  0.84 * 0.5781 * Math.Exp(2.9455 * NDVI)
+                LAI = 0.5781 * Math.Exp(2.9455 * NDVI)
+            Case Functions.Cover.Cotton, Functions.Cover.Dryland_Cotton
+                LAI = 0.03399 * Math.Exp(6.218 * Limit(SAVI, 0.17, 0.7))
+            Case Functions.Cover.Arrowweed
+                'LAI = -2 * Math.Log(1 - Fc)
+                LAI = 0.5781 * Math.Exp(2.9455 * NDVI)
+            Case Functions.Cover.Grass, Functions.Cover.Cheat_Grass_and_Other_Weeds
+                LAI = 24 * 0.1
+            Case Functions.Cover.Bare_Soil, Functions.Cover.Sand_and_Gravel
+                LAI = -Math.Log((0.69 - Limit(SAVI, 0.17, 0.68999)) / 0.59) / 0.91
+        End Select
+
+        Return Limit(LAI, 0.1, 6)
+    End Function
+
+    Function calcHcLandSAT(ByVal NDVI As Single, ByVal NDWI As Single, ByVal SAVI As Single, ByVal oSAVI As Single, ByVal Fc As Single, ByVal Cover As Cover) As Single
+        Dim Hc As Single = 0
+
+        Select Case Cover
+            Case Functions.Cover.Agriculture
+                Dim a As Single = 6.528 : Dim b As Single = -15.29 : Dim q As Single = 0.893 'from alfalfa
+                Hc = Math.Log((q / SAVI - 1) / a) / b
+            Case Functions.Cover.Alfalfa
+                Dim a As Single = 6.528 : Dim b As Single = -15.29 : Dim q As Single = 0.893
+                Hc = Math.Log((q / SAVI - 1) / a) / b
+            Case Functions.Cover.Corn
+                'Hc = (1.2 * NDWI + 0.6) * (1 + 0.04 * Math.Exp(5.3 * NDWI))
+                Hc = (1.86 * oSAVI - 0.2) * (1 + 4.82 * (10 ^ -7) * Math.Exp(17.69 * oSAVI))
+            Case Functions.Cover.Soybean
+                'Hc = (0.5 * NDWI + 0.26) * (1 + 0.005 * Math.Exp(4.5 * NDWI)) 'based on Landsat
+                Hc = (0.55 * oSAVI - 0.02) * (1 + (9.98 * 10 ^ -5) * Math.Exp(9.52 * oSAVI)) 'based on airborne data
+            Case Functions.Cover.Tamarisk, Functions.Cover.Dead_Tamarisk, Functions.Cover.Upland_Bushes, Functions.Cover.Upland_Vegetation, Functions.Cover.Upland_Vegetation2
+
+            Case Functions.Cover.Cotton, Functions.Cover.Dryland_Cotton
+                'Hc = 8.7122 * NDVI ^ 2 + 0.2491 * NDVI
+                Hc = Math.Log((0.7879 / SAVI - 1) / 4.949) / -3.582
+            Case Functions.Cover.Arrowweed
+
+            Case Functions.Cover.Grass, Functions.Cover.Cheat_Grass_and_Other_Weeds
+                Hc = 0.1 'Hc = -1.5429 + 1.8853 * NDVI
+            Case Functions.Cover.Bare_Soil, Functions.Cover.Sand_and_Gravel
+                Hc = 0.1
+            Case Functions.Cover.Wheat
+                Hc = 0.75 * NDVI - 0.075
+            Case Functions.Cover.Guava, Functions.Cover.Acerola, Functions.Cover.Sapoti, Functions.Cover.Graviola, Functions.Cover.Sabia
+                Hc = 3.0
+            Case Functions.Cover.Mango, Functions.Cover.Papaya
+                Hc = 3.0
+            Case Functions.Cover.Cashew, Functions.Cover.Cashew_Early, Functions.Cover.Cashew_Giant
+                Hc = 5.0
+            Case Functions.Cover.Banana, Functions.Cover.Banana_Apple
+                Hc = 4.0
+            Case Functions.Cover.Orange, Functions.Cover.Citrus, Functions.Cover.Lemon, Functions.Cover.Tangerine
+                Hc = 4.0
+            Case Functions.Cover.Mata
+                Hc = 5.0
+            Case Functions.Cover.Grapes, Functions.Cover.Passion_Fruit
+                Hc = 2.0
+            Case Functions.Cover.Mixed_Forest_1
+                Hc = 4.0
+            Case Functions.Cover.Mixed_Forest_2
+                Hc = 3
+            Case Functions.Cover.Watermelon
+                Hc = 0.4
+            Case Functions.Cover.Pineapple
+                Hc = 0.6
+            Case Functions.Cover.Coconut
+                Hc = 4.0
+        End Select
+        If Not (Hc = Hc) Then
+            Hc = Hc
+        End If
+        Return Limit(Hc, 0.1, 6)
+    End Function
+
+    Function calcLAILandSAT(ByVal NDVI As Single, ByVal NDWI As Single, ByVal SAVI As Single, ByVal oSAVI As Single, ByVal Cover As Cover, ByVal Fc As Single) As Single
+        Dim LAI As Single = 0
+
+        Select Case Cover
+            Case Functions.Cover.Agriculture
+                LAI = 0.03399 * Math.Exp(6.218 * Limit(SAVI, 0.17, 0.7))
+            Case Functions.Cover.Corn, Functions.Cover.Soybean
+                'LAI = (2.88 * NDWI + 1.14) * (1 + 0.1039 * Math.Exp(4.1 * NDWI))
+                '(the 2.615 was 2.88 Anderson et al 2004
+                LAI = (4 * oSAVI - 0.8) * (1 + 4.73 * (10 ^ -6) * Math.Exp(15.64 * oSAVI)) 'based on airborne data
+            Case Functions.Cover.Tamarisk, Functions.Cover.Dead_Tamarisk, Functions.Cover.Upland_Bushes, Functions.Cover.Upland_Vegetation, Functions.Cover.Upland_Vegetation2
+                'calcLAI = 0.84 * 0.5781 * Math.Exp(2.9455 * NDVI)
+                LAI = 1.0 * 0.5781 * Math.Exp(2.9455 * NDVI)
+                'LAI = -2 * Math.Log(1 - Fc)
+            Case Functions.Cover.Cotton, Functions.Cover.Dryland_Cotton
+                LAI = 0.03399 * Math.Exp(6.218 * Limit(SAVI, 0.17, 0.7))
+            Case Functions.Cover.Alfalfa
+                LAI = 0.0151 * Math.Exp(6.218 * Limit(SAVI, 0.17, 0.7))
+            Case Functions.Cover.Arrowweed
+                LAI = -2 * Math.Log(1 - Fc)
+                LAI = 0.5781 * Math.Exp(2.9455 * NDVI)
+            Case Functions.Cover.Grass, Functions.Cover.Cheat_Grass_and_Other_Weeds
+                LAI = 24 * 0.1
+            Case Functions.Cover.Bare_Soil, Functions.Cover.Sand_and_Gravel
+                LAI = -Math.Log((0.69 - Limit(SAVI, 0.17, 0.68999)) / 0.59) / 0.91
+            Case Functions.Cover.Wheat
+                If NDVI >= 0.93 Then
+                    LAI = 5
+                Else
+                    LAI = 0.45 * Math.Log(0.76 / (0.93 - NDVI))
+                End If
+            Case Functions.Cover.Guava, Functions.Cover.Acerola, Functions.Cover.Sapoti, Functions.Cover.Graviola, Functions.Cover.Sabia  'almond function
+                LAI = 11.468 * NDVI - 3.2388
+            Case Functions.Cover.Mango, Functions.Cover.Cashew, Functions.Cover.Cashew_Early, Functions.Cover.Cashew_Giant ' mangrove function
+                LAI = 12.74 * NDVI + 1.34
+            Case Functions.Cover.Banana, Functions.Cover.Banana_Apple
+                LAI = 12.5 * NDVI - 1.375
+            Case Functions.Cover.Orange, Functions.Cover.Citrus, Functions.Cover.Lemon, Functions.Cover.Tangerine
+                LAI = 12.5 * NDVI - 1.375
+            Case Functions.Cover.Mata
+                LAI = 6.91 * NDVI - 2.49
+            Case Functions.Cover.Grapes, Functions.Cover.Passion_Fruit
+                LAI = 5.7 * NDVI - 0.25
+            Case Functions.Cover.Mixed_Forest_1
+                LAI = 12.5 * NDVI - 1.375
+            Case Functions.Cover.Mixed_Forest_2 'small bushy tree (used almond)
+                LAI = 11.468 * NDVI - 3.2388
+            Case Functions.Cover.Papaya
+                LAI = 11.468 * NDVI - 3.2388
+            Case Functions.Cover.Coconut
+                LAI = 12.5 * NDVI - 1.375
+            Case Functions.Cover.Pineapple
+                LAI = 12.5 * NDVI - 1.375
+            Case Functions.Cover.Watermelon
+                LAI = 0.03399 * Math.Exp(6.218 * Limit(SAVI, 0.17, 0.7))
+                'Case Else
+                '    LAI = -2 * Math.Log(1 - Fc)
+        End Select
+
+        Return Limit(LAI, 0.1, 6)
+    End Function
+
+
+
+    Function calcLAIMODIS(ByVal NDVI As Single, ByVal NDWI As Single, ByVal SAVI As Single, ByVal oSAVI As Single, ByVal Fc As Single, ByVal Cover As Cover) As Single
+        Dim LAI As Single = 0
+
+        Select Case Cover
+            Case Functions.Cover.Agriculture
+                LAI = 0.03399 * Math.Exp(6.218 * Limit(SAVI, 0.17, 0.7))
+            Case Functions.Cover.Corn
+                'LAI = (2.88 * NDWI + 1.14) * (1 + 0.1039 * Math.Exp(4.1 * NDWI))
+                '(the 2.615 was 2.88 Anderson et al 2004
+                LAI = (4 * oSAVI - 0.8) * (1 + 4.73 * (10 ^ -6) * Math.Exp(15.64 * oSAVI)) 'based on airborne data
+            Case Functions.Cover.Soybean
+                LAI = (4 * oSAVI - 0.8) * (1 + 4.73 * (10 ^ -6) * Math.Exp(15.64 * oSAVI)) 'based on airborne data
+                'LAI = 0.0151 * Math.Exp(6.218 * Limit(SAVI, 0.17, 0.7)) 'from the alfalafa equation
+                'LAI = 0.03399 * Math.Exp(6.218 * Limit(SAVI, 0.17, 0.7))
+            Case Functions.Cover.Tamarisk, Functions.Cover.Dead_Tamarisk, Functions.Cover.Upland_Bushes, Functions.Cover.Upland_Vegetation, Functions.Cover.Upland_Vegetation2
+                'calcLAI = 0.84 * 0.5781 * Math.Exp(2.9455 * NDVI)
+                LAI = 1.0 * 0.5781 * Math.Exp(2.9455 * NDVI)
+                'LAI = -2 * Math.Log(1 - Fc)
+            Case Functions.Cover.Cotton, Functions.Cover.Dryland_Cotton
+                LAI = 0.03399 * Math.Exp(6.218 * Limit(SAVI, 0.17, 0.7))
+            Case Functions.Cover.Alfalfa
+                LAI = 0.0151 * Math.Exp(6.218 * Limit(SAVI, 0.17, 0.85))
+                LAI = 0.03399 * Math.Exp(6.218 * Limit(SAVI, 0.17, 0.85)) 'from SEBAL
+                'LAI = (0.04591 * SAVI - 0.01458) * (1 + 25.99 * Math.Exp(2.225 * SAVI))
+            Case Functions.Cover.Arrowweed
+                'LAI = -2 * Math.Log(1 - Fc)
+                LAI = 0.5781 * Math.Exp(2.9455 * NDVI)
+            Case Functions.Cover.Grass, Functions.Cover.Cheat_Grass_and_Other_Weeds
+                'LAI = 24 * 0.1
+                LAI = 0.03399 * Math.Exp(6.218 * Limit(SAVI, 0.17, 0.7))
+            Case Functions.Cover.Bare_Soil, Functions.Cover.Sand_and_Gravel
+                LAI = -Math.Log((0.69 - Limit(SAVI, 0.17, 0.68999)) / 0.59) / 0.91
+            Case Functions.Cover.Wheat
+                If NDVI >= 0.93 Then
+                    LAI = 5
+                Else
+                    LAI = 0.45 * Math.Log(0.76 / (0.93 - NDVI))
+                End If
+            Case Functions.Cover.Guava, Functions.Cover.Acerola, Functions.Cover.Sapoti, Functions.Cover.Graviola, Functions.Cover.Sabia  'almond function
+                LAI = 11.468 * NDVI - 3.2388
+            Case Functions.Cover.Mango, Functions.Cover.Cashew, Functions.Cover.Cashew_Early, Functions.Cover.Cashew_Giant ' mangrove function
+                LAI = 12.74 * NDVI + 1.34
+            Case Functions.Cover.Banana, Functions.Cover.Banana_Apple
+                LAI = 12.5 * NDVI - 1.375
+            Case Functions.Cover.Orange, Functions.Cover.Citrus, Functions.Cover.Lemon, Functions.Cover.Tangerine
+                LAI = 12.5 * NDVI - 1.375
+            Case Functions.Cover.Mata
+                LAI = 6.91 * NDVI - 2.49
+            Case Functions.Cover.Grapes, Functions.Cover.Passion_Fruit
+                LAI = 5.7 * NDVI - 0.25
+            Case Functions.Cover.Mixed_Forest_1
+                LAI = 12.5 * NDVI - 1.375
+            Case Functions.Cover.Mixed_Forest_2 'small bushy tree (used almond)
+                LAI = 11.468 * NDVI - 3.2388
+            Case Functions.Cover.Papaya
+                LAI = 11.468 * NDVI - 3.2388
+            Case Functions.Cover.Coconut
+                LAI = 12.5 * NDVI - 1.375
+            Case Functions.Cover.Pineapple
+                LAI = 12.5 * NDVI - 1.375
+            Case Functions.Cover.Watermelon
+                LAI = 0.03399 * Math.Exp(6.218 * Limit(SAVI, 0.17, 0.7))
+        End Select
+
+        Return Limit(LAI, 0.1, 6)
+    End Function
+
+    Function Limit(ByVal Value As Single, ByVal MinimumValue As Single, ByVal MaximumValue As Single) As Single
+        Return Math.Min(Math.Max(Value, MinimumValue), MaximumValue)
+    End Function
+
+    Function calcTaerodynamic(ByVal Tsurface As Single, ByVal Tair As Single, ByVal U As Single, ByVal LAI As Single) As Single
+        Return (0.534 * Tsurface) + (0.39 * Tair) + (0.224 * LAI) - (0.192 * U) + 1.67
+    End Function
+
+    ''' <summary>
+    ''' Estimates net radiation for one layer model
+    ''' </summary>
+    ''' <param name="SAVI">Soil Adjusted Vegetation Index</param>
+    ''' <param name="NDVI"></param>
+    ''' <param name="Albedo">Cover Reflectance</param>
+    ''' <param name="Tair">Air Temperature (K)</param>
+    ''' <param name="Temp">Surfce Temperature (K)</param>
+    ''' <param name="Rs">Incoming Solar Radiation (W/m^2)</param>
+    ''' <param name="Ea">Actual Vapor Pressure (KPa?)</param>
+    ''' <param name="Esoil">Soil Emissivity (dimensionless)</param>
+    ''' <param name="Eveg">Vegetation Emissivity (dimensionless)</param>
+    ''' <param name="Sigma">Stefan-Boltzmann's Constant (W/m^2/K^4)</param>
+    ''' <param name="Month">Image Month (integer)</param>
+    ''' <param name="Cover">Land Cover Classification</param>
+    ''' <returns>Net radiation (W/m^2)</returns>
+    ''' <remarks></remarks>
+
+    Function calcRn(ByVal SAVI As Single, ByVal NDVI As Single, ByVal Albedo As Single, ByVal Tair As Single, ByVal Temp As Single, ByVal Rs As Single, _
+                    ByVal Ea As Single, ByVal Esoil As Single, ByVal Eveg As Single, ByVal Sigma As Single, ByVal Month As Integer, ByVal Cover As Cover, ByVal Fc As Single) As Single
+        Dim clf As Single = 0
+        'Eveg = 0.98: Esoil = 0.92: clf = 0
+
+        Dim Epss As Single = Fc * Eveg + (1 - Fc) * Esoil
+        'epsa = 1.24 * (eap * 10 / tap) ^ (1 / 7) 'Clawford-Duchon (1999)
+        Dim Epsa = clf + (1 - clf) * (1.22 + 0.06 * Math.Sin((Month + 2) * Math.PI / 6)) * (Ea / Tair) ^ (1 / 7)
+        Return (1 - Albedo) * Rs + Epsa * Sigma * Tair ^ 4 - Epss * Sigma * Temp ^ 4
+    End Function
+
+    Function calcRaMO_Stable_OLM(ByVal Tair As Single, ByVal Taerodynamic As Single, ByVal U As Single, ByVal Hc As Single, _
+    ByVal Rahn As Single, ByVal Ustarn As Single, ByVal ZoM As Single, ByVal Zoh As Single, _
+    ByVal d As Single, ByVal K As Single, ByVal Cp As Single, ByVal Z As Single, ByVal Gravity As Single) As Resistances_Output
+
+        Dim Resistances_Output As New Resistances_Output
+        Resistances_Output.Rah = Rahn
+
+        'Zom = 0.123 * hc: Zoh = 0.1 * Zom: d = 0.67 * hc
+        Dim Rah As Single = Rahn
+        Dim Un1 As Single = Ustarn
+
+        For i = 1 To 100
+            ' If Abs(tap - Taero) <= 0.001 Then   tap = tap - 0.1
+
+            Dim H As Single = Cp * (Taerodynamic - Tair) / Rah
+            Dim L_MO As Single = ((-Un1) ^ 3 * Tair * Cp) / (Gravity * K * H)
+            'If (L_MO) > -0.1 And (L_MO) < 0.1 Then L_MO = 100
+            'If L_MO < 0# Then Exit For
+            Dim s1 As Single = (Z - d) / L_MO
+            If s1 > 1 Then
+                Resistances_Output.y_m = -5
+                Resistances_Output.y_h = -5
+            Else
+                Resistances_Output.y_m = -5 * s1
+                Resistances_Output.y_h = -5 * s1
+            End If
+            Un1 = (U * K) / (Math.Log((Z - d) / ZoM) - (Resistances_Output.y_m * ((Z - d) / L_MO)) + (Resistances_Output.y_m * (ZoM / L_MO)))
+            Dim Rah1 As Single = (Math.Log((Z - d) / Zoh) - (Resistances_Output.y_h * (Z - d) / L_MO) + (Resistances_Output.y_h * (Zoh / L_MO))) / (Un1 * K)
+            Rah = Rah1
+            'If i = 300 Then MsgBox i
+            If Math.Abs(Rah1 - Rah) < 0.001 Then Exit For
+        Next i
+        'If Abs(L_MO) >= 100 Then
+        'rahp = rahn
+        'y_m = 0#: y_h = 0#
+        'ElseIf L_MO < 0 Then
+        'Resistances_stable = Resistances(tap, Taero, u, hc, rahn, ufn1)
+        'Else
+        ' End If
+
+        Return Resistances_Output
+    End Function
+
+    Function calcRaMO_Unstable_OLM(ByVal Tair As Single, ByVal Taerodynamic As Single, ByVal U As Single, ByVal Hc As Single, _
+ByVal Rahn As Single, ByVal Ustarn As Single, ByVal ZoM As Single, ByVal Zoh As Single, ByVal d As Single, ByVal K As Single, _
+ByVal Cp As Single, ByVal z As Single, ByVal Gravity As Single) As Resistances_Output
+
+        Dim Un1 As Single = Ustarn
+        Dim Resistances_Output As New Resistances_Output
+        Resistances_Output.Rah = Rahn
+        'tap = tap '- 273.15 it should be in Kelvin.
+        'Taero = Taero '- 273.15
+        For I = 1 To 100
+            ' If Math.Abs(Tair - Taerodynamic) = 0 Then Tair = Tair - 0.1 'need
+            Dim H As Single = Cp * (Taerodynamic - Tair) / Resistances_Output.Rah
+            Dim L_MO As Single = ((-Un1 ^ 3) * Tair * Cp) / (Gravity * K * H)
+            'If (L_MO) > -0.1 And (L_MO) < 0.1 Then L_MO = -100
+            'If L_MO > 0 Then Exit For
+            Dim x As Single = (1 - 16 * ((z - d) / L_MO)) ^ 0.25
+            Resistances_Output.y_h = 2 * Math.Log((1 + x ^ 2) / 2)
+            Resistances_Output.y_m = (2 * Math.Log((1 + x) / 2)) + Math.Log((1 + x ^ 2) / 2) - (2 * Math.Atan(x)) + (Math.PI / 2)
+            Un1 = (U * K) / (Math.Log((z - d) / ZoM) - (Resistances_Output.y_m * ((z - d) / L_MO)) + (Resistances_Output.y_m * (ZoM / L_MO)))
+            Dim Rah1 As Single = (Math.Log((z - d) / Zoh) - (Resistances_Output.y_h * (z - d) / L_MO) + (Resistances_Output.y_h * (Zoh / L_MO))) / (Un1 * K)
+            Resistances_Output.Rah = Rah1
+
+            If Math.Abs(Rah1 - Resistances_Output.Rah) < 0.001 Then Exit For
+        Next I
+        'If Abs(L_MO) >= 100 Then
+        'rahp = rahn
+        'y_m = 0#: y_h = 0#
+        'ElseIf L_MO > 0 Then
+        'Resistances = Resistances_stable(tap, Taero, u, hc, rahn, ufn1)
+        'Else
+        'End If
+        Return Resistances_Output
+    End Function
+
+    Function calcRaMO_Stable_TSM(ByRef Resistances As Resistances_Output, ByVal Tair As Single, ByVal Hc As Single, ByVal L_MO As Single, ByVal U As Single, ByVal Fc As Single, ByVal Clump0 As Single, ByVal LAI As Single, ByRef TInitial As TInitial_Output, ByVal Temp As Single, ByVal fTheta As Single, ByVal W As W_Output, ByVal Rs As Single, ByVal Ea As Single, ByVal Month As Single, ByVal Zom As Single, ByVal Zoh As Single, ByVal D As Single, ByVal Z As Single, ByVal Zt As Single, ByVal Ag As Single, ByVal S As Single, ByVal RnCoefficients As RnCoefficients_Output, ByVal WOutput As W_Output, ByVal Cover As Cover) As EnergyComponents_Output
+
+        Dim Output As New EnergyComponents_Output
+        Dim PT As Single = SigmaPT
+
+
+        'Else  'other stable condition when Tinitial.Tsoil < (Tair - 273.15)
+        'If Cover = Functions.Cover.Bare_Soil Then
+        '    Do
+        '        calcRnComponents(Tair, Ea, TInitial.Tsoil, TInitial.Tcanopy, Rs, Ag, Month, RnCoefficients, Output)
+        '        Output.Hsoil = (TInitial.Tsoil - Tair) * W.Cp_TSM / Resistances.Ra
+        '        Output.EVsoil = Output.RnSoil - Output.GTotal - Output.Hsoil
+        '        Output.Ecanopy = PT * W2 * Output.RnCanopy
+        '        Output.Hcanopy = Output.RnCanopy - Output.Ecanopy
+
+        '        If Output.EVsoil < 0 And PT > 0.1 Then
+        '            PT -= 0.01
+        '        Else
+        '            Exit Do
+        '        End If
+        '    Loop
+        'Else
+        '    Do
+        '        Resistances.Rsoil = 1 / (0.0025 + (0.012 * Resistances.Usoil))
+        '        'Resistances.Rx = 90 / LAI * (S / Resistances.UdoZom) ^ (0.5)
+        '        'TInitial.Tcanopy = (Tair - 273.15 + Temp - 273.15) / 2
+        '        'TInitial.Tsoil = calcTsoilFromTcanopy(Temp - 273.15, fTheta, TInitial.Tcanopy)
+        '        calcRnComponents(Tair, Ea, TInitial.Tsoil, TInitial.Tcanopy, Rs, Ag, Month, RnCoefficients, Output)
+
+        '        W2 = calcW2(TInitial.Tcanopy, W.Cp2P)
+        '        Output.Ecanopy = SigmaPT * W2 * Output.RnCanopy
+        '        Output.Hcanopy = Output.RnCanopy - Output.Ecanopy
+
+        '        TInitial.Tcanopy = ((Tair - 273.15) / Resistances.Ra + (Temp - 273.15) / _
+        '        (Resistances.Rsoil * (1 - fTheta)) + Resistances.Rx / W.Cp_TSM * Output.Hcanopy * (1 / Resistances.Ra + 1 / Resistances.Rsoil + 1 / Resistances.Rx)) / _
+        '        (1 / Resistances.Ra + 1 / Resistances.Rsoil + fTheta / (Resistances.Rsoil * (1 - fTheta)))
+        '        Dim TcLin As Single = TInitial.Tcanopy + 273.15
+        '        Dim Td As Single = TcLin * (1 + Resistances.Rsoil / Resistances.Ra) - Resistances.Rx / W.Cp_TSM * Output.Hcanopy * (1 + Resistances.Rsoil / Resistances.Rx + Resistances.Rsoil / Resistances.Ra) - Tair * Resistances.Rsoil / Resistances.Ra
+        '        Dim DeltaTc = (Temp ^ 4 - fTheta * TcLin ^ 4 - (1 - fTheta) * Td ^ 4) / ((1 - fTheta) * 4 * Td ^ 3 * (1 + Resistances.Rsoil / Resistances.Ra) + fTheta * 4 * TcLin ^ 3)
+        '        TInitial.Tcanopy = TInitial.Tcanopy + DeltaTc
+        '        Dim Tac As Single = TInitial.Tcanopy - Output.Hcanopy * Resistances.Rx / W.Cp_TSM
+        '        TInitial.Tsoil = calcTsoilFromTcanopy(Temp - 273.15, fTheta, TInitial.Tcanopy)
+        '        calcRnComponents(Tair, Ea, TInitial.Tsoil, TInitial.Tcanopy, Rs, Ag, Month, RnCoefficients, Output)
+        '        Output.Hsoil = (TInitial.Tsoil - Tac) * W.Cp_TSM / Resistances.Rsoil
+        '        W2 = calcW2(TInitial.Tcanopy, W.Cp2P)
+        '        Output.Ecanopy = SigmaPT * W2 * Output.RnCanopy
+        '        Output.Hcanopy = Output.RnCanopy - Output.Ecanopy
+        '        Output.EVsoil = Output.RnSoil - Output.GTotal - Output.Hsoil
+        '        If Output.EVsoil < 0 And PT > 0.1 Then
+        '            PT -= 0.01
+        '        Else
+        '            Exit Do
+        '        End If
+        '    Loop
+        'End If
+        'End If
+
+        'if hcanopy >rncanopy means no latent heat flux, adjust boc =6 and bos =10
+        If Output.Hcanopy > Output.RnCanopy Then
+            Dim BowenRatioSoil As Single = 10
+            Dim BownRatioCanopy As Single = 6
+            Output.EVsoil = (Output.RnSoil - Output.GTotal) / (1 + BowenRatioSoil)
+            Output.Ecanopy = Output.RnCanopy / (1 + BownRatioCanopy)
+            Output.Hcanopy = Output.RnCanopy - Output.Ecanopy
+            Output.Hsoil = Output.RnSoil - Output.GTotal - Output.EVsoil
+            Dim Tac As Single = (Tair - 273.15) + Resistances.Ra * Output.Hsoil / W.Cp_TSM + Resistances.Ra * Output.Hcanopy / W.Cp_TSM
+            TInitial.Tcanopy = Output.Hcanopy * Resistances.Rx / W.Cp_TSM + Tac
+            TInitial.Tsoil = Output.Hsoil * Resistances.Rsoil / W.Cp_TSM + Tac
+        End If
+
+        If Output.EVsoil < 0 Then 'And PT <= 0.1 Then
+            Dim BowenRatioSoil As Single = 10
+            Output.EVsoil = (Output.RnSoil - Output.GTotal) / (1 + BowenRatioSoil)
+            Output.Hsoil = Output.RnSoil - Output.GTotal - Output.EVsoil
+            Dim Tac As Single = ((Tair - 273.15) / Resistances.Ra + (Temp - 273.15) / (fTheta * Resistances.Rx) - _
+            ((1 - fTheta) * Output.Hsoil * Resistances.Rsoil / W.Cp_TSM) / (fTheta * Resistances.Rx) + Output.Hsoil / W.Cp_TSM) / _
+            (1 / Resistances.Ra + 1 / Resistances.Rx + (1 - fTheta) / (fTheta * Resistances.Rx))
+            Dim TacLin As Single = Tac + 273.15
+            Dim Te As Single = TacLin * (1 + Resistances.Rx / Resistances.Ra) - Output.Hsoil * Resistances.Rx / W.Cp_TSM - Tair * Resistances.Rx / Resistances.Ra
+            Dim DeltaTac = (Temp ^ 4 - (1 - fTheta) * (Output.Hsoil / W.Cp_TSM * Resistances.Rsoil + TacLin) ^ 4 - fTheta * Te ^ 4) / _
+            (4 * fTheta * Te ^ 3 * (1 + Resistances.Rx / Resistances.Ra) + 4 * (1 - fTheta) * (Output.Hsoil / W.Cp_TSM * Resistances.Rsoil + TacLin) ^ 3)
+            Tac = Tac + DeltaTac
+            TInitial.Tsoil = Output.Hsoil * Resistances.Rsoil / W.Cp_TSM + Tac
+            TInitial.Tcanopy = calcTcanopyFromTsoil(Temp, fTheta, TInitial.Tsoil)
+            Output.Hcanopy = W.Cp_TSM * (TInitial.Tcanopy - Tac) / Resistances.Rx
+            'TInitial.Tcanopy = 0
+            calcRnComponents(Tair, Ea, TInitial.Tsoil, TInitial.Tcanopy, Rs, Ag, Month, RnCoefficients, Output)
+            Output.EVsoil = (Output.RnSoil - Output.GTotal) / (1 + BowenRatioSoil)
+            Output.Hsoil = Output.RnSoil - Output.GTotal - Output.EVsoil
+            Output.Ecanopy = Output.RnCanopy - Output.Hcanopy
+        End If
+        Output.RnTotal = Output.RnCanopy + Output.RnSoil
+
+        If Output.RnTotal > 600 And Cover = Functions.Cover.Alfalfa Then
+            Output.RnTotal = Output.RnTotal
+        End If
+        If Cover = Functions.Cover.Alfalfa Then
+            Cover = Cover
+        End If
+        Resistances.y_m = 0
+        Resistances.y_h = 0
+
+        Return Output
+    End Function
+
+    Function calcRaMO_Neutral_TSM(ByRef Resistances As Resistances_Output, ByVal U As Single, ByVal Z As Single, ByVal Zt As Single, ByVal L_MO As Single, ByVal Temp As Single, ByVal D As Single, ByVal fTheta As Single, ByVal Ag As Single, ByVal Tair As Single, ByVal Tsoil As Single, ByVal Rs As Single, ByVal Ea As Single, ByVal RecordDate As Date, ByVal NDVI As Single, ByVal Albedo As Single, ByVal SAVI As Single, ByVal LAI As Single, ByVal S As Single, ByVal Fc As Single, ByVal Zoh As Single, ByVal Zom As Single, ByVal Hc As Single, ByVal Clump0 As Single, ByVal WOutput As W_Output, ByVal RnCoefficients As RnCoefficients_Output, ByVal Cover As Cover) As EnergyComponents_Output
+        Resistances = calcResistances(U, Clump0, L_MO, Hc, fTheta, Temp, Tsoil, Tair, D, Zom, Z, Zt, Fc, S, Zoh, LAI, Cover, Stability.Neutral)
+
+        Dim Output As New EnergyComponents_Output
+        Select Case Cover
+            Case Functions.Cover.Bare_Soil, Functions.Cover.Sand_and_Gravel
+                Output.RnSoil = calcRn(SAVI, NDVI, Albedo, Tair, Tsoil, Rs, Ea, Esoil, Eveg, Sigma, RecordDate.Month, Cover, Fc)
+                Output.RnCanopy = 0
+                Output.GTotal = Ag * Output.RnSoil
+                Output.RnTotal = Output.RnSoil
+                Output.Hsoil = (Temp - Tair) * WOutput.Cp_TSM / Resistances.Ra
+                Output.EVsoil = Output.RnSoil - Output.GTotal - Output.Hsoil
+                Output.Ecanopy = 0
+                Output.Hcanopy = 0
+                'tsoil = Temp - 273.15
+            Case Else
+                Dim Rsoil As Single = 1 / (0.0025 + (0.012 * Resistances.Usoil))
+                Dim Rx As Single = 90 / LAI * (S / Resistances.UdoZom) ^ (0.5)
+                Dim Tinitial = calcTInitial(Temp, Tair, fTheta)
+                calcRnComponents(Tair, Ea, Tinitial.Tsoil, Tinitial.Tcanopy, Rs, Ag, RecordDate.Month, RnCoefficients, Output)
+                Dim W As Single = calcW2(Tinitial.Tcanopy, WOutput.Cp2P)
+                Output.Ecanopy = SigmaPT * W * Output.RnCanopy
+                Output.Hcanopy = Output.RnCanopy - Output.Ecanopy
+                Tinitial.Tcanopy = ((Tair - 273.15) / Resistances.Ra + (Temp - 273.15) / (Rsoil * (1 - fTheta)) + Rx / WOutput.Cp_TSM * Output.Hcanopy * (1 / Resistances.Ra + 1 / Rsoil + 1 / Rx)) / (1 / Resistances.Ra + 1 / Rsoil + fTheta / (Rsoil * (1 - fTheta)))
+                Dim TcLin As Single = Tinitial.Tcanopy + 273.15
+                Dim Td As Single = TcLin * (1 + Rsoil / Resistances.Ra) - Rx / WOutput.Cp_TSM * Output.Hcanopy * (1 + Rsoil / Rx + Rsoil / Resistances.Ra) - Tair * Rsoil / Resistances.Ra
+                Dim DeltaTc As Single = (Temp ^ 4 - fTheta * TcLin ^ 4 - (1 - fTheta) * Td ^ 4) / ((1 - fTheta) * 4 * Td ^ 3 * (1 + Rsoil / Resistances.Ra) + fTheta * 4 * TcLin ^ 3)
+                Tinitial.Tcanopy += DeltaTc
+                Dim Tac As Single = Tinitial.Tcanopy - Output.Hcanopy * Rx / WOutput.Cp_TSM
+                Tinitial.Tsoil = calcTsoilFromTcanopy(Temp - 273.15, fTheta, Tinitial.Tcanopy)
+                Output.Hsoil = (Tinitial.Tsoil - Tac) * WOutput.Cp_TSM / Rsoil
+                calcRnComponents(Tair, Ea, Tinitial.Tsoil, Tinitial.Tcanopy, Rs, Ag, RecordDate.Month, RnCoefficients, Output)
+                W = calcW2(Tinitial.Tcanopy, WOutput.Cp2P)
+                Output.Ecanopy = SigmaPT * W * Output.RnCanopy
+                Output.Hcanopy = Output.RnCanopy - Output.Ecanopy
+                Output.EVsoil = Output.RnSoil - Output.GTotal - Output.Hsoil
+        End Select
+        Return Output
+    End Function
+
+    Function calcRaMO_Unstable_TSM(ByRef Resistances As Resistances_Output, ByVal Z As Single, ByVal Zt As Single, ByVal Clump0 As Single, ByVal Ag As Single, ByVal Ea As Single, ByRef TInitial As TInitial_Output, ByVal Rs As Single, ByVal Month As Single, ByVal RnCoefficients As RnCoefficients_Output, ByVal Hc As Single, ByVal fTheta As Single, ByVal Temp As Single, ByVal Tair As Single, ByVal Fc As Single, ByVal S As Single, ByVal Zoh As Single, ByVal LAI As Single, ByVal D As Single, ByVal L_MO As Single, ByVal U As Single, ByVal Zom As Single, ByVal W As W_Output, ByVal Cover As Cover, ByVal albedo As Single) As EnergyComponents_Output
+       
+        ' here we will be getting Rx and Ra.
+        Resistances = calcResistances(U, Clump0, L_MO, Hc, fTheta, Temp, TInitial.Tsoil, Tair, D, Zom, Z, Zt, Fc, S, Zoh, LAI, Cover, Stability.Unstable)
+
+        Dim Output As New EnergyComponents_Output
+
+        'here we are getting Rn and G
+        calcRnComponents(Tair, Ea, TInitial.Tsoil, TInitial.Tcanopy, Rs, Ag, Month, RnCoefficients, Output)
+
+        'calculate for the new Rsoil value and check if EVsoil< 0
+        Dim PT As Single = SigmaPT
+
+        Do
+            Dim W2 As Single = calcW2(TInitial.Tcanopy, W.Cp2P)
+            Output.Ecanopy = PT * W2 * Output.RnCanopy
+            Output.Hcanopy = Output.RnCanopy - Output.Ecanopy
+
+            If Cover = Functions.Cover.Bare_Soil Then
+                Resistances.Rsoil = 0.0
+            Else
+                If TInitial.Tsoil > TInitial.Tcanopy Then
+                    Resistances.Rsoil = 1 / (0.0025 * (TInitial.Tsoil - TInitial.Tcanopy) ^ (1 / 3) + 0.012 * Resistances.Usoil)
+                Else
+                    Resistances.Rsoil = 1 / (0.0025 + 0.012 * Resistances.Usoil)
+                End If
+            End If
+
+            ' get updated Tcanopy and Tsoil based on the calculated Rsoil, Ra, and Rx
+            TInitial = calcTcomponents(Temp, TInitial.Tcanopy, TInitial.Tsoil, Tair, Resistances, fTheta, W, Output, Cover)
+            calcRnComponents(Tair, Ea, TInitial.Tsoil, TInitial.Tcanopy, Rs, Ag, Month, RnCoefficients, Output)
+            If Cover = Functions.Cover.Bare_Soil Or Cover = Functions.Cover.Sand_and_Gravel Then
+                Output.Hsoil = (TInitial.Tsoil - Tair) * W.Cp_TSM / Resistances.Ra
+            Else
+                Output.Hsoil = (TInitial.Tsoil - TInitial.Tac) * W.Cp_TSM / Resistances.Rsoil
+            End If
+            Output.GTotal = Ag * Output.RnSoil
+            Output.EVsoil = Output.RnSoil - Output.GTotal - Output.Hsoil
+            'If Esoil < 0 Then Priestley Talor factor has to be adjusted
+            If Output.EVsoil < 0 And PT > 0.1 Then
+                PT -= 0.01
+            Else
+                Exit Do
+            End If
+        Loop
+
+        ' if still evsoil <0 ,pt = 0 and set bowen ratio to 10
+        If Output.EVsoil < 0 And PT <= 0.1 Then
+            Dim BowenRatioSoil As Single = 10
+            Output.EVsoil = (Output.RnSoil - Output.GTotal) / (1 + BowenRatioSoil)
+            Output.Hsoil = Output.RnSoil - Output.GTotal - Output.EVsoil
+            Dim Tac As Single = ((Tair - 273.15) / Resistances.Ra + (Temp - 273.15) / (fTheta * Resistances.Rx) - ((1 - fTheta) * Output.Hsoil * Resistances.Rsoil / W.Cp_TSM) / (fTheta * Resistances.Rx) + Output.Hsoil / W.Cp_TSM) / (1 / Resistances.Ra + 1 / Resistances.Rx + (1 - fTheta) / (fTheta * Resistances.Rx))
+            Dim TacLin As Single = Tac + 273.15
+            Dim Te As Single = TacLin * (1 + Resistances.Rx / Resistances.Ra) - Output.Hsoil * Resistances.Rx / W.Cp_TSM - Tair * Resistances.Rx / Resistances.Ra
+            Dim DeltaTac As Single = (Temp ^ 4 - (1 - fTheta) * (Output.Hsoil / W.Cp_TSM * Resistances.Rsoil + TacLin) ^ 4 - fTheta * Te ^ 4) / (4 * fTheta * Te ^ 3 * (1 + Resistances.Rx / Resistances.Ra) + 4 * (1 - fTheta) * (Output.Hsoil / W.Cp_TSM * Resistances.Rsoil + TacLin) ^ 3)
+            Tac = Tac + DeltaTac
+            TInitial.Tsoil = Output.Hsoil * Resistances.Rsoil / W.Cp_TSM + Tac
+            TInitial.Tcanopy = calcTcanopyFromTsoil(Temp, fTheta, TInitial.Tsoil)
+            Output.Hcanopy = W.Cp_TSM * (TInitial.Tcanopy - Tac) / Resistances.Rx
+            calcRnComponents(Tair, Ea, TInitial.Tsoil, TInitial.Tcanopy, Rs, Ag, Month, RnCoefficients, Output)
+            Output.EVsoil = (Output.RnSoil - Output.GTotal) / (1 + BowenRatioSoil)
+            Output.Hsoil = Output.RnSoil - Output.GTotal - Output.EVsoil
+            Output.Ecanopy = Output.RnCanopy - Output.Hcanopy
+        End If
+
+        ' if Hcanopy > Rncanopy means no latent heat flux, adjust Bowen ratio for soil and canopy as boc =6 and bos =10
+        If Output.Hcanopy > Output.RnCanopy Then
+            Dim BowenRatioSoil As Single = 10
+            Dim BownRatioCanopy As Single = 6
+            Output.EVsoil = (Output.RnSoil - Output.GTotal) / (1 + BowenRatioSoil)
+            Output.Ecanopy = Output.RnCanopy / (1 + BownRatioCanopy)
+            Output.Hcanopy = Output.RnCanopy - Output.Ecanopy
+            Output.Hsoil = Output.RnSoil - Output.GTotal - Output.EVsoil
+            Dim Tac As Single = (Tair - 273.15) + Resistances.Ra * Output.Hsoil / W.Cp_TSM + Resistances.Ra * Output.Hcanopy / W.Cp_TSM
+            TInitial.Tcanopy = Output.Hcanopy * Resistances.Rx / W.Cp_TSM + Tac
+            TInitial.Tsoil = Output.Hsoil * Resistances.Rsoil / W.Cp_TSM + Tac
+        End If
+
+        ' for other stable conditions (Tsoil-Tair) < 0
+        If TInitial.Tsoil + 273.15 - Tair < 0 Then
+            ' calculation for this part is placed in the calcResistance function
+            Resistances = calcResistances(U, Clump0, L_MO, Hc, fTheta, Temp, TInitial.Tsoil, Tair, D, Zom, Z, Zt, Fc, S, Zoh, LAI, Cover, Stability.Stable)
+            TInitial.Tcanopy = (Tair - 273.15 + Temp - 273.15) / 2
+            TInitial.Tsoil = calcTsoilFromTcanopy(Temp - 273.15, fTheta, TInitial.Tcanopy)
+            calcRnComponents(Tair, Ea, TInitial.Tsoil, TInitial.Tcanopy, Rs, Ag, Month, RnCoefficients, Output)
+            Dim W2 As Single = calcW2(TInitial.Tcanopy, W.Cp2P)
+            Output.Ecanopy = PT * W2 * Output.RnCanopy
+            Output.Hcanopy = Output.RnCanopy - Output.Ecanopy
+            TInitial = calcTcomponents(Temp, TInitial.Tcanopy, TInitial.Tsoil, Tair, Resistances, fTheta, W, Output, Cover)
+            TInitial.Tsoil = calcTsoilFromTcanopy(Temp - 273.15, fTheta, TInitial.Tcanopy)
+            Output.Hsoil = W.Cp_TSM * (TInitial.Tsoil + 273.15 - TInitial.Tac) / (Resistances.Rsoil)
+            Output.EVsoil = Output.RnSoil - Output.GTotal - Output.Hsoil
+            Output.HTotal = Output.Hsoil + Output.Hcanopy
+            Output.Stability = 1
+
+        End If
+
+        Output.HTotal = Output.Hsoil + Output.Hcanopy
+        Output.ETotal = Output.EVsoil + Output.Ecanopy
+
+        'Dim LV As Single = 2501300 - 2366 * (Tair - 273.15)
+        'Dim L_MO_new As Single = -W.Cp_TSM * Tair * Resistances.Ustar ^ 3 / (K * Gravity * (Output.HTotal + 0.61 * Tair * W.Cp2 * (Output.ETotal) / LV))
+        'If L_MO_new > 0 Then
+        '    L_MO_new = L_MO_new
+        'End If
+
+        'If Not (Output.Hsoil = Output.Hsoil) Then
+        '    Output.Hsoil = Output.Hsoil
+        'End If
+        Return Output
+    End Function
+
+    Function calcResistances(ByVal U As Single, ByVal Clump0 As Single, ByVal L_MO As Single, ByVal Hc As Single, ByVal fTheta As Single, ByVal Temp As Single, ByVal Tsoil As Single, ByVal Tair As Single, ByVal D As Single, ByVal Zom As Single, ByVal Z As Single, ByVal Zt As Single, ByVal Fc As Single, ByVal S As Single, ByVal Zoh As Single, ByVal LAI As Single, ByVal Cover As Cover, ByVal Stability As Stability) As Resistances_Output
+        Dim Output As New Resistances_Output
+
+        Select Case Stability
+            Case Functions.Stability.Stable ' at stable conditions, model solve as parallel rex term is kept (Kustas code)
+                Dim AA As Single
+                Output.Ustar = U * K / Math.Log((Z - D) / Zom)
+                ' this check was during the unstable conditions but Tsoil-Tair <0 leading to a stable conditions
+                If Tsoil < (Tair - 273.15) Then ' other stable condition (frm Kustas code)
+                    If Fc <= 0.0631 Or LAI <= 0.1 Or Cover = Functions.Cover.Bare_Soil Then
+                        Hc = 0.1 ' to aviod zero AA
+                        AA = 0.28 * ((Clump0 * LAI) ^ (2 / 3)) * ((Hc) ^ (1 / 3)) * ((S) ^ (-1 / 3))
+                        Dim expAA As Single = Math.Exp(-AA * 0.9) : If expAA > 0.95 Then expAA = 0.95
+                        'Dim ZohZom As Single = calcZohZom(Output.Ustar, Zom)
+                        Output.Ucanopy = U * Math.Log((Hc - D) / Zom) / (U * K / Output.Ustar)
+                        Output.Usoil = Output.Ucanopy * expAA    'from Martha's code ' it is not needed since Rs is set to zero, just to avoid division by zero
+                        Output.Rx = 10 ^ 8
+                        Output.Rsoil = 0
+                        'Output.Ra = (Math.Log((Zt - D) / ZohZom) - Output.y_h) / (Output.Ustar * K) 'Martha's code
+                        Output.Ra = Math.Log((Zt - D) / Zom) / (Output.Ustar * K)
+                    Else
+                        AA = 0.28 * ((Clump0 * LAI) ^ (2 / 3)) * ((Hc) ^ (1 / 3)) * ((S) ^ (-1 / 3))
+                        Output.Ra = Math.Log((Zt - D) / Zom) / (Output.Ustar * K)
+                        Output.Ucanopy = U * Math.Log((Hc - D) / Zom) / (U * K / Output.Ustar)
+                        Output.Usoil = Output.Ucanopy * Math.Exp(-AA * (1 - (0.05 / Hc)))
+                        Output.Rsoil = 1 / (0.0025 + (0.012 * Output.Usoil))
+                        Dim fLocal As Single = LAI / Fc
+                        Dim AALocal As Single = 0.28 * fLocal ^ (2 / 3) * Hc ^ (1 / 3) * S ^ (-1 / 3)
+                        Output.UdoZom = Output.Ucanopy * Math.Exp(-AALocal * (1 - (D + Zom) / Hc))
+                        Output.Rx = 90 / LAI * (S / Output.UdoZom) ^ 0.5
+                    End If
+                    Output.Rex = 130 * (Math.Sqrt(S * Output.Ustar) / Clump0 * LAI) - 1.7
+                    Output.Ra += Output.Rex  'this is not used in Martha's model disalexi
+                Else
+                    If Cover = Functions.Cover.Bare_Soil Then
+                        Hc = 0.1 ' to aviod zero AA
+                        AA = 0.28 * ((Clump0 * LAI) ^ (2 / 3)) * ((Hc) ^ (1 / 3)) * ((S) ^ (-1 / 3))
+                        Dim expAA As Single = Math.Exp(-AA * 0.9) : If expAA > 0.95 Then expAA = 0.95
+                        Output.Ucanopy = U * Math.Log((Hc - D) / Zom) / (U * K / Output.Ustar)
+                        Output.Usoil = Output.Ucanopy * expAA    'from Martha's code ' it is not needed since Rs is set to zero, just to avoid division by zero
+                        Dim ZohZom As Single = calcZohZom(Output.Ustar, Zom)
+                        Output.Rx = 10 ^ 8
+                        Output.UdoZom = U ' it is not needed since Rs is set to zero, just to avoid division by zero
+                        'Output.Ra = 1 / (0.0025 + 0.012 * Output.Usoil)
+                        'Output.Ra = Math.Log((Z - D) / ZohZom) - Output.y_h
+                        'Output.Ra = (Math.Log((Zt - D) / ZohZom) - Output.y_h) / (Output.Ustar * K) 'Martha's code
+                        Output.Ra = Math.Log((Zt - D) / Zom) / (Output.Ustar * K)
+                        Output.Rex = 130 * (Math.Sqrt(S * Output.Ustar) / Clump0 * LAI) - 1.7
+                        Output.Ra = Output.Ra + Output.Rex 'this is not used in Martha's model disalexi
+                    Else
+                        AA = 0.28 * ((Clump0 * LAI) ^ (2 / 3)) * ((Hc) ^ (1 / 3)) * ((S) ^ (-1 / 3))
+                        Output.Ucanopy = U * Math.Log((Hc - D) / Zom) / (U * K / Output.Ustar)
+                        Output.Usoil = Output.Ucanopy * Math.Exp(-AA * (1 - (0.05 / Hc)))
+                        Dim fLocal As Single = LAI / Fc
+                        Dim AALocal As Single = 0.28 * fLocal ^ (2 / 3) * Hc ^ (1 / 3) * S ^ (-1 / 3)
+                        Output.UdoZom = Output.Ucanopy * Math.Exp(-AALocal * (1 - (D + Zom) / Hc))
+                        Output.Rx = 90 / LAI * (S / Output.UdoZom) ^ 0.5
+                        Output.Ra = Math.Log((Zt - D) / Zom) / (Output.Ustar * K)
+                        Output.Rex = 130 * (Math.Sqrt(S * Output.Ustar) / Clump0 * LAI) - 1.7
+                        Output.Ra = Output.Ra + Output.Rex 'this is not used in Martha's model disalexi
+                    End If
+                End If
+
+            Case Functions.Stability.Neutral
+                If Cover = Functions.Cover.Bare_Soil Then
+                    Output.Ustar = (U * K) / (Math.Log((Z - D) / Zom))
+                    Dim ZohZom As Single = calcZohZom(Output.Ustar, Zom)
+                Else
+                    Output.Ustar = (U * K) / Math.Log((Z - D) / Zom)
+                    Output.Ra = (Math.Log((Z - D) / Zom)) / (Output.Ustar * K)
+                    Output.Ucanopy = U * Math.Log((Hc - D) / Zom) / (U * K / Output.Ustar)
+                    Dim AA = 0.28 * (Clump0 * LAI) ^ (2 / 3) * Hc ^ (1 / 3) * S ^ (-1 / 3)
+                    Dim AAlocal = 0.28 * (LAI / Fc) ^ (2 / 3) * Hc ^ (1 / 3) * S ^ (-1 / 3)
+                    Output.Usoil = Output.Ucanopy * Math.Exp(-AA * (1 - 0.05 / Hc))
+                    Output.UdoZom = Output.Ucanopy * Math.Exp(-AAlocal * (1 - (D + Zom) / Hc))
+
+                End If
+
+            Case Functions.Stability.Unstable
+                Dim X As Single = (1 - 16 * (Z - D) / L_MO) ^ 0.25
+                Dim Xt As Single = (1 - 16 * (Zt - D) / L_MO) ^ 0.25
+                Output.y_m = 2 * Math.Log((1 + X) / 2) + Math.Log((1 + X ^ 2) / 2) - 2 * Math.Atan(X) + Math.PI / 2
+                Output.y_h = 2 * Math.Log((1 + Xt ^ 2) / 2)
+                Output.Ustar = (U * K) / (Math.Log((Z - D) / Zom) - Output.y_m)
+                If Output.Ustar < 0 Then Output.Ustar = 0.01
+
+                'ustar = (u * k) / (Math.Log((z - d) / Zom) - (y_m * ((z - d) / L_MO)) + (y_m * (Zom / L_MO)))
+                '''''ra = ((Math.Log((z - d) / Zom) - y_m) * (Math.Log((z - d) / Zom) - y_h)) / (k ^ 2 * u)
+                ''''''Uc = u * (Math.Log((hc - d) / Zom) / (Math.Log((z - d) / Zom)))
+                'Output.Ra = (Math.Log((Zt - D) / Zom) - Output.y_h) / (Output.Ustar * K)
+
+                Dim AA As Single
+
+                If Cover = Functions.Cover.Bare_Soil Then
+                    'Output.Ucanopy = U * Math.Log((Hc - D) / Zom) / (U * K / Output.Ustar)
+                    Hc = 0.1 ' to aviod zero value of AA
+                    AA = 0.28 * (Clump0 * LAI) ^ (2 / 3) * Hc ^ (1 / 3) * S ^ (-1 / 3)
+                    Output.Ucanopy = U * Math.Log((Hc - D) / Zom) / (U * K / Output.Ustar)
+                    Dim ZohZom As Single = calcZohZom(Output.Ustar, Zom)
+                    Dim expAA As Single = Math.Exp(-AA * 0.9) : If expAA > 0.95 Then expAA = 0.95
+                    Output.Usoil = Output.Ucanopy * expAA    'from Martha's code ' it is not needed since Rs is set to zero, just to avoid division by zero
+                    Output.Rx = 10 ^ 8
+                    Output.UdoZom = U ' it is not needed since Rs is set to zero, just to avoid division by zero
+                    Output.UdoZom = Output.Ucanopy * Math.Exp(-AA * (1 - (D + Zom) / Hc))
+                    'Output.Ra = 1 / (0.0025 + 0.012 * Output.Usoil)
+                    Output.Ra = Math.Log((Z - D) / ZohZom) - Output.y_h
+                    Output.Ra = (Math.Log((Zt - D) / ZohZom) - Output.y_h) / (Output.Ustar * K) 'Martha's code
+                    'Output.Rex = ZohZom / (K * Output.Ustar)
+                    ''Output.Ra = Output.Ra + Output.Rex 'this is not used in Martha's model disalexi
+                    'Output.Rx = 90 / LAI * (S / Output.UdoZom) ^ 0.5
+                Else
+                    AA = 0.28 * (Clump0 * LAI) ^ (2 / 3) * Hc ^ (1 / 3) * S ^ (-1 / 3)
+                    Output.Ucanopy = U * Math.Log((Hc - D) / Zom) / (U * K / Output.Ustar)
+                    Output.Ra = (Math.Log((Zt - D) / Zom) - Output.y_h) / (Output.Ustar * K)
+                    Output.Usoil = Output.Ucanopy * Math.Exp(-AA * (1 - 0.05 / Hc))
+                    Dim fLocal As Single = LAI / Fc
+                    Dim AALocal As Single = 0.28 * fLocal ^ (2 / 3) * Hc ^ (1 / 3) * S ^ (-1 / 3)
+                    If LAI <= 0.1 Or Fc <= 0.063 Then
+                        Output.UdoZom = Output.Ucanopy * Math.Exp(-AA * (1 - (D + Zom) / Hc))
+                    Else
+                        Output.UdoZom = Output.Ucanopy * Math.Exp(-AALocal * (1 - (D + Zom) / Hc))
+                    End If
+
+                    Output.Rx = 90 / LAI * (S / Output.UdoZom) ^ 0.5
+                End If
+
+        End Select
+
+        Return Output
+    End Function
+    Function calcZohZom(ByVal Ustar As Single, ByVal Zom As Single)
+        Dim ZohZom As Single = 7.79 '2 'k * 7.79
+        Dim z0plus As Single = Ustar * Zom / (1.5 * 10 ^ -5)
+        ZohZom = Math.Exp(-K * (4.31 * z0plus ^ 0.247 - 5))
+        'ZohZom = (1 / 8) * 0.1 / 2.0
+
+        Return ZohZom
+    End Function
+
+    Function calcRnComponents(ByVal Tair As Single, ByVal Ea As Single, ByVal Tsoil As Single, ByVal Tcanopy As Single, ByVal Rs As Single, ByVal Ag As Single, ByVal Month As Single, ByVal RnCoefficients As RnCoefficients_Output, ByRef Output As EnergyComponents_Output) As EnergyComponents_Output
+        Dim Clf As Single = 0
+
+        Dim Eair As Single = Clf + (1 - Clf) * (1.22 + 0.06 * Math.Sin((Month + 2) * Math.PI / 6)) * (Ea / Tair) ^ (1 / 7)
+        'Dim Eair = 1.24 * (Ea / Tair) ^ (1 / 7)
+        Dim RlSky As Single = Eair * Sigma * Tair ^ 4
+        Dim RlSoil As Single = 0.96 * Sigma * (Tsoil + 273.15) ^ 4
+        Dim RlCanopy = Eveg * Sigma * (Tcanopy + 273.15) ^ 4
+        Output.RnSoil = RnCoefficients.TauThermal * RlSky + (1 - RnCoefficients.TauThermal) * RlCanopy - RlSoil + RnCoefficients.TauSolar * (1 - RnCoefficients.AlbSoil) * Rs
+
+        'If Tcanopy = 0 Then ' for bare soil areas. This needs update
+        '    Output.RnCanopy = 0
+        'Else
+        '    Output.RnCanopy = (1 - RnCoefficients.TauThermal) * (RlSky + RlSoil - 2 * RlCanopy) + (1 - RnCoefficients.TauSolar) * (1 - RnCoefficients.AlbCanopy) * Rs
+        'End If
+
+        Output.RnCanopy = (1 - RnCoefficients.TauThermal) * (RlSky + RlSoil - 2 * RlCanopy) + (1 - RnCoefficients.TauSolar) * (1 - RnCoefficients.AlbCanopy) * Rs
+
+        Output.RnTotal = Output.RnCanopy + Output.RnSoil
+        Output.GTotal = Ag * Output.RnSoil
+        If Output.RnTotal > 600 Then
+            Output.RnTotal = Output.RnTotal
+        End If
+        Return Output
+    End Function
+
+    Function calcRnCoefficients(ByVal ClumpSun As Single, ByVal LAI As Single, ByVal Zenith As Single, ByVal Cover As Cover, ByVal Fc As Single, ByRef Bioproperties As Bioproperties) As RnCoefficients_Output
+        Dim AlphaSoilVis As Single = 0.15  ' this was 0.15  from Kustas code , it indicated high soil ref
+        Dim AlphaSoilNIR As Single = 0.3   ' this was 0.25  from Kustas code , it indicated high soil ref
+
+        ' adjusting for cases with short vegetation 
+        If Fc <= 0.0631 Or LAI <= 0.1 Then
+            'Bioproperties.AlphaVIS = 0.83
+            'Bioproperties.AlphaNIR = 0.57
+        End If
+        'Dim AlphaVis As Single = 0.83, AlphaNIR As Single = 0.4, AlphaTIR As Single = 0.95
+        'Select Case Cover
+        '    Case Functions.Cover.Corn, Functions.Cover.Soybean
+        '        AlphaVis = 0.88 : AlphaNIR = 0.2 : AlphaTIR = 0.95
+        '    Case Functions.Cover.Soybean
+        '        AlphaVis = 0.85 : AlphaNIR = 0.15 : AlphaTIR = 0.95
+        '    Case Functions.Cover.Tamarisk, Functions.Cover.Grass
+        '        AlphaVis = 0.88 : AlphaNIR = 0.55 : AlphaTIR = 0.95
+        '    Case Functions.Cover.Dead_Tamarisk, Functions.Cover.Arrowweed
+        '        AlphaVis = 0.88 : AlphaNIR = 0.55 : AlphaTIR = 0.95
+        '    Case Functions.Cover.Bare_Soil
+        '        AlphaVis = 0.83 : AlphaNIR = 0.57 : AlphaTIR = 0.95
+        '    Case Functions.Cover.Wheat
+        '        AlphaVis = 0.83 : AlphaNIR = 0.4 : AlphaTIR = 0.95
+        'End Select
+
+        'If LAI <= 0.1 Then 'Or Fc <= 0.0631 
+        '    Bioproperties.AlphaVIS = 0.83 : Bioproperties.AlphaNIR = 0.57 : Bioproperties.AlphaTIR = 0.95
+        'End If
+
+        Dim Fsun As Single = ClumpSun * LAI
+        Dim Xp As Single = 1.0
+        Dim Kbe As Single = Math.Sqrt(Xp ^ 2 + (Math.Tan(Zenith * Math.PI / 180)) ^ 2) / (Xp + 1.774 * (Xp + 1.182) ^ (-0.733))
+
+        'set limits for kbe
+        Dim Kd As Single = 0
+        Select Case Cover
+            Case Functions.Cover.Corn, Functions.Cover.Soybean
+                If LAI <= 0.5 Then
+                    Kd = 0.9
+                ElseIf LAI > 0.5 And LAI <= 2 Then
+                    Kd = 0.8
+                Else
+                    Kd = 0.7
+                End If
+            Case Functions.Cover.Tamarisk, Functions.Cover.Arrowweed
+                If LAI <= 0.5 Then
+                    Kd = 0.9
+                ElseIf LAI > 0.5 And LAI <= 2 Then
+                    Kd = 0.85
+                Else
+                    Kd = 0.7
+                End If
+            Case Functions.Cover.Bare_Soil, Functions.Cover.Sand_and_Gravel
+                'Kd = 1
+                If LAI <= 0.5 Then
+                    Kd = 0.9
+                ElseIf LAI > 0.5 And LAI <= 2 Then
+                    Kd = 0.85
+                Else
+                    Kd = 0.7
+                End If
+            Case Else
+                If LAI <= 0.5 Then
+                    Kd = 0.9
+                ElseIf LAI > 0.5 And LAI <= 2 Then
+                    Kd = 0.8
+                Else
+                    Kd = 0.7
+                End If
+        End Select
+
+        Dim RefRohVis As Single = (1 - Math.Sqrt(Bioproperties.AlphaVIS)) / (1 + Math.Sqrt(Bioproperties.AlphaVIS))
+        Dim RefRohNIR As Single = (1 - Math.Sqrt(Bioproperties.AlphaNIR)) / (1 + Math.Sqrt(Bioproperties.AlphaNIR))
+        Dim RefVis As Single = 2 * Kbe / (1 + Kbe) * RefRohVis
+        Dim RefNIR As Single = 2 * Kbe / (1 + Kbe) * RefRohNIR
+
+        Dim AlbCanopyVisDir As Single = (RefVis + (RefVis - AlphaSoilVis) / (RefVis * AlphaSoilVis - 1) * Math.Exp(-2 * Math.Sqrt(Bioproperties.AlphaVIS) * Kbe * Fsun)) / _
+        (1 + RefVis * (RefVis - AlphaSoilVis) / (RefVis * AlphaSoilVis - 1) * Math.Exp(-2 * Math.Sqrt(Bioproperties.AlphaVIS) * Kbe * Fsun))
+
+        Dim AlbCanopyNIRDir As Single = (RefNIR + (RefNIR - AlphaSoilNIR) / (RefNIR * AlphaSoilNIR - 1) * Math.Exp(-2 * Math.Sqrt(Bioproperties.AlphaNIR) * Kbe * Fsun)) / _
+        (1 + RefNIR * (RefNIR - AlphaSoilNIR) / (RefNIR * AlphaSoilNIR - 1) * Math.Exp(-2 * Math.Sqrt(Bioproperties.AlphaNIR) * Kbe * Fsun))
+
+        Dim TauVisDir As Single = ((RefVis ^ 2 - 1) * Math.Exp(-Math.Sqrt(Bioproperties.AlphaVIS) * Kbe * Fsun)) / _
+        ((RefVis * AlphaSoilVis - 1) + RefVis * (RefVis - AlphaSoilVis) * Math.Exp(-2 * Math.Sqrt(Bioproperties.AlphaVIS) * Kbe * Fsun))
+
+        Dim TauNIRDir As Single = ((RefNIR ^ 2 - 1) * Math.Exp(-Math.Sqrt(Bioproperties.AlphaNIR) * Kbe * Fsun)) / _
+        ((RefNIR * AlphaSoilNIR - 1) + RefNIR * (RefNIR - AlphaSoilNIR) * Math.Exp(-2 * Math.Sqrt(Bioproperties.AlphaNIR) * Kbe * Fsun))
+
+        RefVis = 2 * Kd / (1 + Kd) * RefRohVis
+        RefNIR = 2 * Kd / (1 + Kd) * RefRohNIR
+
+        Dim AlbCanopyVisDiff As Single = (RefVis + (RefVis - AlphaSoilVis) / (RefVis * AlphaSoilVis - 1) * Math.Exp(-2 * Math.Sqrt(Bioproperties.AlphaVIS) * Kd * Fsun)) / _
+        (1 + RefVis * (RefVis - AlphaSoilVis) / (RefVis * AlphaSoilVis - 1) * Math.Exp(-2 * Math.Sqrt(Bioproperties.AlphaVIS) * Kd * Fsun))
+
+        Dim AlbCanopyNIRDiff As Single = (RefNIR + (RefNIR - AlphaSoilNIR) / (RefNIR * AlphaSoilNIR - 1) * Math.Exp(-2 * Math.Sqrt(Bioproperties.AlphaNIR) * Kd * Fsun)) / _
+        (1 + RefNIR * (RefNIR - AlphaSoilNIR) / (RefNIR * AlphaSoilNIR - 1) * Math.Exp(-2 * Math.Sqrt(Bioproperties.AlphaNIR) * Kd * Fsun))
+
+        Dim TauVisDiff As Single = (RefVis ^ 2 - 1) * Math.Exp(-Math.Sqrt(Bioproperties.AlphaVIS) * Kd * Fsun) / _
+        ((RefVis * AlphaSoilVis - 1) + RefVis * (RefVis - AlphaSoilVis) * Math.Exp(-2 * Math.Sqrt(Bioproperties.AlphaVIS) * Kd * Fsun))
+
+        Dim TauNIRDiff As Single = (RefNIR ^ 2 - 1) * Math.Exp(-Math.Sqrt(Bioproperties.AlphaNIR) * Kd * Fsun) / _
+       ((RefNIR * AlphaSoilNIR - 1) + RefNIR * (RefNIR - AlphaSoilNIR) * Math.Exp(-2 * Math.Sqrt(Bioproperties.AlphaNIR) * Kd * Fsun))
+
+        Dim DiffVis As Single = 0.2 : Dim DiffNIR As Single = 0.1 : Dim DirVis As Single = 0.8 : Dim DirNIR As Single = 0.9
+
+        Dim Output As New RnCoefficients_Output
+        Dim fvis As Single = 0.48 : Dim fnir = 0.52 ' from Martha's code
+        Output.TauSolar = fvis * (DiffVis * TauVisDiff + DirVis * TauVisDir) + fnir * (DiffNIR * TauNIRDiff + DirNIR * TauNIRDir)
+
+        Output.AlbCanopy = fvis * (DiffVis * AlbCanopyVisDiff + DirVis * AlbCanopyVisDir) + fnir * (DiffNIR * AlbCanopyNIRDiff + DirNIR * AlbCanopyNIRDir)
+        Output.AlbSoil = fvis * AlphaSoilVis + fnir * AlphaSoilNIR
+
+        Output.TauThermal = Math.Exp(-Bioproperties.AlphaTIR * Fsun) 'from Kustas code
+        Kd = -0.0683 * Math.Log(Fsun) + 0.804 ' from Martha's code
+        Dim meanleaf As Single = Fc * 0.55 + (1 - Fc) * 0.3
+        Dim tau_1 As Single = Math.Exp(-Math.Sqrt(meanleaf) * Kd * Fsun)
+        Output.TauThermal = 0.99 * (1 - tau_1)
+
+        Return Output
+    End Function
+
+    Function calcTcomponents(ByVal Temp As Single, ByRef Tcanopy As Single, ByRef Tsoil As Single, ByVal Tair As Single, ByVal Resistances As Resistances_Output, ByVal fTheta As Single, ByVal W As W_Output, ByVal EnergyComponents As EnergyComponents_Output, ByVal Cover As Cover) As TInitial_Output
+        Tair -= 273.15
+        Temp -= 273.15
+
+        'multiply all equations by Rsoil to avoid division by zero for bare soil condition (from Matha's code)
+        Dim Numer As Single : Dim Deno As Single
+        'Numer = (Tair / Resistances.Ra + Temp / (Resistances.Rsoil * (1 - fTheta)) + Resistances.Rx / W.Cp_TSM * EnergyComponents.Hcanopy * (1 / Resistances.Ra + 1 / Resistances.Rsoil + 1 / Resistances.Rx))
+        'Deno = (1 / Resistances.Ra + 1 / Resistances.Rsoil + fTheta / (Resistances.Rsoil * (1 - fTheta)))
+        Numer = (Tair * Resistances.Rsoil / Resistances.Ra + Temp / ((1 - fTheta)) + Resistances.Rx / W.Cp_TSM * EnergyComponents.Hcanopy * (Resistances.Rsoil / Resistances.Ra + 1 + Resistances.Rsoil / (Resistances.Rx)))
+        Deno = (Resistances.Rsoil / Resistances.Ra + 1 + fTheta / ((1 - fTheta)))
+        Dim TcLin As Single
+        Tcanopy = Numer / Deno
+        TcLin = Tcanopy + 273.15
+
+        Dim Td As Single = TcLin * (1 + Resistances.Rsoil / Resistances.Ra) - Resistances.Rx / W.Cp_TSM * EnergyComponents.Hcanopy * (1 + Resistances.Rsoil / (Resistances.Rx) + Resistances.Rsoil / Resistances.Ra) - (Tair + 273.15) * Resistances.Rsoil / Resistances.Ra
+
+        Dim DeltaTc As Single = ((Temp + 273.15) ^ 4 - fTheta * TcLin ^ 4 - (1 - fTheta) * Td ^ 4) / ((1 - fTheta) * 4 * Td ^ 3 * (1 + Resistances.Rsoil / Resistances.Ra) + fTheta * 4 * TcLin ^ 3)
+        Tcanopy += DeltaTc
+        Tsoil = calcTsoilFromTcanopy(Temp, fTheta, Tcanopy)
+        Dim Tac As Single
+        'Tac = Tcanopy - EnergyComponents.Hcanopy * Resistances.Rx / W.Cp_TSM ''''' based on Kustas code
+        Tac = ((Temp + 273.15) * Resistances.Rsoil / Resistances.Ra + (Tsoil + 273.15) + (Tcanopy + 273.15) * Resistances.Rsoil / (Resistances.Rx)) / (Resistances.Rsoil / Resistances.Ra + 1 + Resistances.Rsoil / (Resistances.Rx)) ''''based on EQ. A4 Norman et al. 1995
+        Tac = Tac - 273.15
+        
+        Dim Output As New TInitial_Output ' all in C
+        Output.Tac = Tac
+        Output.Tcanopy = Tcanopy
+        Output.Tsoil = Tsoil
+        Return Output
+    End Function
+
+    Function calcTsoilFromTcanopy(ByVal Temp As Single, ByVal fTheta As Single, ByVal Tcanopy As Single) As Single
+        'trp is in oK and tcano is in oC
+        Temp += 273.15
+        Tcanopy += 273.15
+        Dim Tsoil As Single
+        If Temp ^ 4 - fTheta * Tcanopy ^ 4 < 0 Then
+            Tsoil = (Temp - 273.15 - fTheta * (Tcanopy - 273.15)) / (1 - fTheta)
+        Else
+            Tsoil = ((Temp ^ 4 - fTheta * Tcanopy ^ 4) / (1 - fTheta)) ^ (1 / 4) - 273.15
+        End If
+        Return Tsoil  'in oC
+    End Function
+
+    Function calcTcanopyFromTsoil(ByVal Temp As Single, ByVal fTheta As Single, ByVal Tsoil As Single) As Single
+        Tsoil += +273.15
+        Dim Tcanopy As Single
+        If Temp ^ 4 - (1 - fTheta) * Tsoil ^ 4 < 0 Then
+            Tcanopy = ((Temp - 273.15) - (1 - fTheta) * (Tsoil - 273.15)) / fTheta
+        Else
+            Tcanopy = ((Temp ^ 4 - (1 - fTheta) * Tsoil ^ 4) / fTheta) ^ (1 / 4) - 273.15
+        End If
+        Return Tcanopy  'in oC
+    End Function
+
+    Function calcW(ByVal Tair As Single, ByVal Ea As Single, ByVal P As Single, ByVal Es As Single, ByVal Tr As Single) As W_Output
+        Dim Rho As Single = 1 / (287.04 * Tair) * (P - 0.3783 * Ea) * 100
+        Dim Lambda As Single = 2501300 - 2366 * (Tair - 273.15)
+        Dim Rhov As Single = 0.622 * Ea * 100 / (287.04 * Tair)
+        Dim Q As Single = Rhov / Rho
+        Dim Cp0 As Single = 1005
+        Dim Output As New W_Output
+        Output.Cp2 = Cp0 * (1 + 0.84 * Q)
+        Output.Gamma = Output.Cp2 * P / (0.622 * Lambda)
+        Dim Delta As Single = 373.15 * Es * (13.3185 - 3.952 * Tr - 1.9335 * Tr ^ 2 - 0.5196 * Tr ^ 3) / (Tair ^ 2)
+        Output.W = Delta / (Output.Gamma + Delta)
+        Output.Cp_TSM = Output.Cp2 * Rho
+        Output.Cp2P = Output.Cp2 * P
+        Return Output
+    End Function
+
+    Function calcW2(ByVal Tcanopy As Single, ByVal Cp2P As Single) As Single
+        Dim Lambda As Single = 2501300 - 2366 * (Tcanopy)
+        Dim Tres As Single = 1 - 373.15 / (Tcanopy + 273.15)
+        Dim Esp As Single = 1013.25 * Math.Exp(13.3185 * Tres - 1.976 * Tres ^ 2 - 0.6445 * Tres ^ 3 - 0.1299 * Tres ^ 4)
+        Dim Delta As Single = 373.15 * Esp * (13.3185 - 3.952 * Tres - 1.9335 * Tres ^ 2 - 0.5196 * Tres ^ 3) / (Tcanopy + 273.15) ^ 2
+        Dim Gamma As Single = Cp2P / (0.622 * Lambda)
+        Return Delta / (Delta + Gamma)
+    End Function
+
+    Function calcU2(ByVal U As Single, ByVal Z As Single) As Single
+        Return 4.87 * U / Math.Log(67.8 * Z - 5.42)
+        'Return U
+    End Function
+
+    Function calcSunZenith(ByVal RecordDate As DateTime, ByVal SiteLatitude As Single, ByVal SiteLongitude As Single, ByVal StandardLongitude As Single) As Single
+        SiteLatitude = ToRadians(SiteLatitude)
+        Dim TimeHour As Single = 11.0
+        Dim TimeMinute As Single = 0
+        Dim B As Single = 2 * math.PI * (RecordDate.DayOfYear - 81.25) / 365
+        Dim E As Single = 9.87 * Math.Sin(2 * B) - 7.53 * Math.Cos(B) - 1.5 * Math.Sin(B)
+        Dim Delta As Single = ToRadians(23.45 * Math.Sin(2 * Math.PI * (284 + RecordDate.DayOfYear) / 365))
+        'Dim SolarTime As Single = (RecordDate.Hour + RecordDate.Minute / 60) + 4 * (StandardLongitude - SiteLongitude) / 60 + E / 60
+        Dim SolarTime As Single = (TimeHour + TimeMinute / 60) + 4 * (StandardLongitude - SiteLongitude) / 60 + E / 60
+        Dim Omega As Single = ToRadians((SolarTime - 12) * 15)
+        Dim cosZ As Single = Math.Sin(Delta) * Math.Sin(SiteLatitude) + Math.Cos(Delta) * Math.Cos(SiteLatitude) * Math.Cos(Omega)
+        calcSunZenith = ToDegrees(Math.Acos(cosZ))
+    End Function
+
+    Function calcTInitial(ByVal Temp As Single, ByVal Tair As Single, ByVal Ftheta As Single) As TInitial_Output
+        Dim Tcanopy As Single = (Tair - 273.15 + Temp - 273.15) / 2 'in oK
+        Dim Tsoil As Single = 0
+        'tsoil is in oC
+        If (Temp ^ 4 - Ftheta * (Tcanopy + 273.15) ^ 4) < 0 Then
+            Tsoil = ((Temp - 273.15) - Ftheta * Tcanopy) / (1 - Ftheta)
+        Else
+            Tsoil = (((Temp ^ 4 - Ftheta * (Tcanopy + 273.15) ^ 4) / (1 - Ftheta)) ^ (1 / 4)) - 273.15
+        End If
+        'check the computed tsoil
+        If Tsoil - (Temp - 273.15) > 15 Then
+            Tsoil = (Temp - 273.15) + 15
+            If (Temp ^ 4 - (1 - Ftheta) * (Tsoil + 273.15) ^ 4) < 0 Then
+                Tcanopy = ((Temp - 273.15) - (1 - Ftheta) * Tsoil) / Ftheta
+            Else
+                Tcanopy = ((Temp ^ 4 - (1 - Ftheta) * (Tsoil + 273.15) ^ 4) / Ftheta) ^ (1 / 4) - 273.15
+            End If
+        End If
+
+        Dim TsoilInitial As New TInitial_Output
+        TsoilInitial.Tcanopy = Tcanopy        'in oC
+        TsoilInitial.Tsoil = Tsoil          'in oC
+        TsoilInitial.Tac = 0
+        Return TsoilInitial
+    End Function
+
+    Function calcAg(ByVal NDVI As Single) As Single
+        Dim Ag As Single = 0.3
+
+        'timeratio = Math.Abs(timeop - 12.5) / 12.5
+        Dim TimeRatio As Single = 0.2
+        If TimeRatio < 0.27 Then
+            Ag = 0.3
+            'ag = 0.583 * Math.Exp(-2.13 * NDVI(countR, countC))
+        Else
+            Ag = 0.925 - 2.184 * TimeRatio
+        End If
+
+        Return Ag
+    End Function
+
+    Function calcKcbReflectance(ByVal Cover As Cover, ByVal SAVI As Single, Optional ByVal NDVI As Single = 0)
+        Select Case Cover
+            Case Functions.Cover.Corn
+                Return SAVI * 1.835 - 0.034
+            Case Functions.Cover.Soybean
+                Return SAVI * 1.638 + 0.003
+            Case Functions.Cover.Cotton
+                Return SAVI * 1.587 + 0.007
+            Case Functions.Cover.Dryland_Cotton
+                Return SAVI * 1.587 + 0.007
+            Case Else
+                Return 0
+        End Select
+    End Function
+
+    Function calcSeasonInterpolation(ByVal DoY As Integer, ByVal KcbIni As Single, ByVal KcbMid As Single, ByVal KcbEnd As Single, ByVal DateIni As Integer, ByVal DateDev As Integer, ByVal DateMid As Integer, ByVal DateLate As Integer, ByVal DateEnd As Integer)
+        Select Case DoY
+            Case Is > DateEnd, Is < DateIni
+                Return 0
+            Case Is >= DateLate
+                Return KcbMid + (KcbEnd - KcbMid) * (DoY - DateLate) / (DateEnd - DateLate)
+            Case Is >= DateMid
+                Return KcbMid
+            Case Is >= DateDev
+                Return KcbIni + (KcbMid - KcbIni) * (DoY - DateDev) / (DateMid - DateDev)
+            Case Is >= DateIni
+                Return KcbIni
+            Case Else
+                Return 0
+        End Select
+    End Function
+
+    Function calcSeasonInterpolation(ByVal DoY As Integer, ByVal Days() As Integer, ByVal Kcbs() As Single)
+        Select Case DoY
+            Case Is > Days(Days.Count - 1), Is < Days(0)
+                Return 0
+            Case Else
+                Dim Index As Integer = -1
+                For I = 0 To Days.Count - 2
+                    If DoY >= Days(I) And DoY < Days(I + 1) Then
+                        Index = I
+                        Exit For
+                    End If
+                Next
+                If Index > -1 Then
+                    Return Kcbs(Index) + (Kcbs(Index + 1) - Kcbs(Index)) * (DoY - Days(Index)) / (Days(Index + 1) - Days(Index))
+                Else
+                    Return Kcbs(Days.Count - 1)
+                End If
+        End Select
+    End Function
+
+    Function calcET(ByVal G As Single, ByVal Rn As Single, ByVal LE As Single, ByVal Tair As Single, ByVal AvailableEnergy As Single, ByVal RefETinst As Single, ByVal RefET As Single, ByVal ETExtrapolation As ETExtrapolation) As Single
+        Dim Lambda As Single = (2.501 - (2.361 * 10 ^ -3) * (Tair - 273.15)) * 10 ^ 6
+        Dim ETLE As Single = 0
+
+        Dim f = (3600 * LE / Lambda)
+
+        Select Case ETExtrapolation
+            Case ETExtrapolation.Evaporative_Fraction
+                ETLE = LE / (Rn - G) * AvailableEnergy * 0.0864 / (Lambda / 1000000)
+            Case ETExtrapolation.Reference_Evapotranspiration
+                ETLE = (3600 * LE / Lambda) / RefETinst * RefET
+        End Select
+
+        Return Limit(ETLE, 0, 15)
+    End Function
+
+    Function ToDegrees(ByVal Value)
+        Return 180 / Math.PI * Value
+    End Function
+
+    Function ToRadians(ByVal Value)
+        Return Math.PI / 180 * Value
+    End Function
+
+    Function calcActualVaporPressure(ByVal SpecifiHumidity As Single, ByVal AtmosPressure As Single)
+        'SpecifiHumidity and actural pressure need to be in g/kg
+        ' AtmosPressure needs to be in hPa
+
+        'convert AtmosPressure from mb to hPa (1 mb= hPa)
+        AtmosPressure = AtmosPressure * 1
+
+        'Convert SpecificHumidity from kg/kg to g/kg
+        SpecifiHumidity = SpecifiHumidity * 1000
+
+        Dim epsilon As Single = 0.622
+        Dim SH = SpecifiHumidity / 1000
+        Return (SH * AtmosPressure / (epsilon * (1 - SH) + SH))  'converted back to mb
+    End Function
+
+    Public Function GetNearestDateImageIndex(ByVal MultispectralImage As String, ByVal TargetImages As List(Of String)) As Integer
+        Dim Index As Integer = -1
+
+        Dim MultispectralDate As DateTime = GetDateFromPath(MultispectralImage)
+        Dim ImageDate As New List(Of DateTime)
+        For I = 0 To TargetImages.Count - 1
+            ImageDate.Add(GetDateFromPath(TargetImages(I)))
+        Next
+        If ImageDate.Count = 1 Then
+            Index = 0
+        ElseIf MultispectralDate <= ImageDate(0) Then
+            Index = 0
+        ElseIf MultispectralDate >= ImageDate(TargetImages.Count - 1) Then
+            Index = TargetImages.Count - 1
+        Else
+            For I = 0 To TargetImages.Count - 2
+                If MultispectralDate > ImageDate(I) And MultispectralDate <= ImageDate(I + 1) Then
+                    If MultispectralDate - ImageDate(I) < MultispectralDate - ImageDate(0) Then
+                        Index = I
+                    Else
+                        Index = I + 1
+                    End If
+                End If
+            Next
+        End If
+
+        Return Index
+    End Function
+
+    Public Function GetSameDateImageIndex(ByVal MultispectralImage As String, ByVal TargetImages As List(Of String)) As Integer
+        Dim Index As Integer = -1
+
+        Dim MultispectralDate = GetDateFromPath(MultispectralImage)
+        For I = 0 To TargetImages.Count - 1
+            If MultispectralDate = GetDateFromPath(TargetImages(I)) Then
+                Index = I
+                Exit For
+            End If
+        Next
+
+        Return Index
+    End Function
+
+    Public Function GetSameDateImageIndex(ByVal RecordDate As DateTime, ByVal TargetImages As List(Of String)) As Integer
+        Dim Index As Integer = -1
+
+        For I = 0 To TargetImages.Count - 1
+            If RecordDate = GetDateFromPath(TargetImages(I)) Then Index = I : Exit For
+        Next
+
+        Return Index
+    End Function
+
+    Public Function GetDateFromPath(ByVal Path As String) As DateTime
+        Dim DateString As String = Mid(IO.Path.GetFileNameWithoutExtension(Path), IO.Path.GetFileNameWithoutExtension(Path).Length - 15, 16)
+        Return DateTime.ParseExact(DateString, "MM-dd-yyyy HH-mm", Nothing)
+    End Function
+
+    Public Function Clean(ByVal Value)
+        If (Value) = Single.MinValue Then
+            Dim f = 4
+            f = 5
+        End If
+        If Value.ToString.Contains("Infinity") Then
+            Return 0
+        Else
+            Return Value
+        End If
+    End Function
+
+    Public Function CleanNull(ByVal Value)
+        If IsDBNull(Value) Then
+            Return 0
+        Else
+            Return Value
+        End If
+    End Function
+
+    Public Function calcETAssimilation(ByRef ETcAdjusted As Single, ByRef EnergyBalanceET As Single, ByVal Method As DataAssimilation)
+        Select Case Method
+            Case DataAssimilation.Single_Weight
+                Return ETcAdjusted + 0.78 * (EnergyBalanceET - ETcAdjusted)
+            Case Else
+                Return ETcAdjusted
+        End Select
+    End Function
+
+#End Region
+
+#Region "Classes"
+
+    Class CoverPoint
+        Public CoverName As New List(Of String)
+        Public KcbInitial As New List(Of Single)
+        Public KcbMid As New List(Of Single)
+        Public KcbEnd As New List(Of Single)
+        Public PeriodInitial As New List(Of Integer)
+        Public PeriodDevelopment As New List(Of String)
+        Public PeriodMid As New List(Of Integer)
+        Public PeriodEnd As New List(Of Integer)
+        Public MaximumRootDepth As New List(Of Single)
+        Public MaximumCoverHeight As New List(Of Single)
+        Public MinimumCoverHeight As New List(Of Single)
+        Public DateInitial As New List(Of Integer)
+        Public P As New List(Of Single)
+
+        Sub Populate(ByVal CoverTable As ESRI.ArcGIS.Geodatabase.ITable, ByVal CoverPointIndex As CoverPointIndex)
+            CoverName.Clear()
+            KcbInitial.Clear()
+            KcbMid.Clear()
+            KcbEnd.Clear()
+            PeriodInitial.Clear()
+            PeriodDevelopment.Clear()
+            PeriodMid.Clear()
+            PeriodEnd.Clear()
+            MaximumRootDepth.Clear()
+            MaximumCoverHeight.Clear()
+            MinimumCoverHeight.Clear()
+            DateInitial.Clear()
+            P.Clear()
+
+            Dim CoverCursor As ESRI.ArcGIS.Geodatabase.ICursor = CoverTable.Search(Nothing, True)
+            Dim CoverRow As ESRI.ArcGIS.Geodatabase.IRow = CoverCursor.NextRow()
+            Dim Count As Integer = 0
+            Do While Not CoverRow Is Nothing
+                CoverName.Add(0) : If CoverPointIndex.CoverName > -1 Then CoverName(Count) = CoverRow.Value(CoverPointIndex.CoverName)
+                KcbInitial.Add(0) : If CoverPointIndex.KcbInitial > -1 Then KcbInitial(Count) = CoverRow.Value(CoverPointIndex.KcbInitial)
+                KcbMid.Add(0) : If CoverPointIndex.KcbMid > -1 Then KcbMid(Count) = CoverRow.Value(CoverPointIndex.KcbMid)
+                KcbEnd.Add(0) : If CoverPointIndex.KcbEnd > -1 Then KcbEnd(Count) = CoverRow.Value(CoverPointIndex.KcbEnd)
+                PeriodInitial.Add(0) : If CoverPointIndex.PeriodInitial > -1 Then PeriodInitial(Count) = CoverRow.Value(CoverPointIndex.PeriodInitial)
+                PeriodDevelopment.Add(0) : If CoverPointIndex.PeriodDevelopment > -1 Then PeriodDevelopment(Count) = CoverRow.Value(CoverPointIndex.PeriodDevelopment)
+                PeriodMid.Add(0) : If CoverPointIndex.PeriodMid > -1 Then PeriodMid(Count) = CoverRow.Value(CoverPointIndex.PeriodMid)
+                PeriodEnd.Add(0) : If CoverPointIndex.PeriodEnd > -1 Then PeriodEnd(Count) = CoverRow.Value(CoverPointIndex.PeriodEnd)
+                MaximumRootDepth.Add(0) : If CoverPointIndex.MaximumRootDepth > -1 Then MaximumRootDepth(Count) = CoverRow.Value(CoverPointIndex.MaximumRootDepth)
+                MaximumCoverHeight.Add(0) : If CoverPointIndex.MaximumCoverHeight > -1 Then MaximumCoverHeight(Count) = CoverRow.Value(CoverPointIndex.MaximumCoverHeight)
+                MinimumCoverHeight.Add(0) : If CoverPointIndex.MinimumCoverHeight > -1 Then MinimumCoverHeight(Count) = CoverRow.Value(CoverPointIndex.MinimumCoverHeight)
+                DateInitial.Add(0) : If CoverPointIndex.DateInitial > -1 Then DateInitial(Count) = CoverRow.Value(CoverPointIndex.DateInitial)
+                P.Add(0) : If CoverPointIndex.P > -1 Then P(Count) = CoverRow.Value(CoverPointIndex.P)
+                Count += 1
+                CoverRow = CoverCursor.NextRow()
+            Loop
+            System.Runtime.InteropServices.Marshal.ReleaseComObject(CoverCursor)
+        End Sub
+
+    End Class
+
+    Class CoverPointIndex
+        Public CoverName As Integer
+        Public KcbInitial As Integer
+        Public KcbMid As Integer
+        Public KcbEnd As Integer
+        Public PeriodInitial As Integer
+        Public PeriodDevelopment As Integer
+        Public PeriodMid As Integer
+        Public PeriodEnd As Integer
+        Public MaximumRootDepth As Integer
+        Public MaximumCoverHeight As Integer
+        Public MinimumCoverHeight As Integer
+        Public DateInitial As Integer
+        Public P As Integer
+
+        Public Sub Initialize()
+            CoverName = -1
+            KcbInitial = -1
+            KcbMid = -1
+            KcbEnd = -1
+            PeriodInitial = -1
+            PeriodDevelopment = -1
+            PeriodMid = -1
+            PeriodEnd = -1
+            MaximumRootDepth = -1
+            MaximumCoverHeight = -1
+            MinimumCoverHeight = -1
+            DateInitial = -1
+            P = -1
+        End Sub
+
+    End Class
+
+    Class WeatherPoint
+        Public Shared ActualVaporPressure As New List(Of Single)
+        Public Shared AirTemperature As New List(Of Single)
+        Public Shared AnemometerReferenceHeight As New List(Of Single)
+        Public Shared AirTemperatureReferenceHeight As New List(Of Single)
+        Public Shared AtmosphericPressure As New List(Of Single)
+        Public Shared CoverName As New List(Of String)
+        Public Shared Irrigation As New List(Of Single)
+        Public Shared RelativeHumidity As New List(Of Single)
+        Public Shared Precipitation As New List(Of Single)
+        Public Shared ETDailyReference As New List(Of Single)
+        Public Shared ETInstantaneous As New List(Of Single)
+        Public Shared SolarRadiation As New List(Of Single)
+        Public Shared WindSpeed As New List(Of Single)
+        Public Shared RecordDate As New List(Of DateTime)
+
+        Sub Populate(ByVal WeatherTable As ESRI.ArcGIS.Geodatabase.ITable, ByVal WeatherPointIndex As WeatherPointIndex, ByVal RecordDate As DateTime)
+            ActualVaporPressure.Clear()
+            AirTemperature.Clear()
+            AnemometerReferenceHeight.Clear()
+            AirTemperatureReferenceHeight.Clear()
+            AtmosphericPressure.Clear()
+            CoverName.Clear()
+            Irrigation.Clear()
+            RelativeHumidity.Clear()
+            Precipitation.Clear()
+            ETDailyReference.Clear()
+            ETInstantaneous.Clear()
+            SolarRadiation.Clear()
+            WindSpeed.Clear()
+            WeatherPoint.RecordDate.Clear()
+
+            Dim WeatherCursor As ESRI.ArcGIS.Geodatabase.ICursor = WeatherTable.Search(Nothing, True)
+            Dim WeatherRow As ESRI.ArcGIS.Geodatabase.IRow = WeatherCursor.NextRow()
+            Dim Count As Integer = 0
+            Do While Not WeatherRow Is Nothing
+                If Not IsDBNull(WeatherRow.Value(WeatherPointIndex.RecordDate)) Then
+                    If CDate(WeatherRow.Value(WeatherPointIndex.RecordDate)) = RecordDate.Date Then
+                        ActualVaporPressure.Add(0) : If WeatherPointIndex.ActualVaporPressure > -1 Then ActualVaporPressure(Count) = CleanNull(WeatherRow.Value(WeatherPointIndex.ActualVaporPressure))
+                        AirTemperature.Add(0) : If WeatherPointIndex.AirTemperature > -1 Then AirTemperature(Count) = CleanNull(WeatherRow.Value(WeatherPointIndex.AirTemperature))
+                        AnemometerReferenceHeight.Add(0) : If WeatherPointIndex.AnemometerReferenceHeight > -1 Then AnemometerReferenceHeight(Count) = CleanNull(WeatherRow.Value(WeatherPointIndex.AnemometerReferenceHeight))
+                        AirTemperatureReferenceHeight.Add(0) : If WeatherPointIndex.AirTemperatureReferenceHeight > -1 Then AirTemperatureReferenceHeight(Count) = CleanNull(WeatherRow.Value(WeatherPointIndex.AirTemperatureReferenceHeight))
+                        AtmosphericPressure.Add(0) : If WeatherPointIndex.AtmosphericPressure > -1 Then AtmosphericPressure(Count) = CleanNull(WeatherRow.Value(WeatherPointIndex.AtmosphericPressure))
+                        CoverName.Add(0) : If WeatherPointIndex.CoverName > -1 Then CoverName(Count) = CleanNull(WeatherRow.Value(WeatherPointIndex.CoverName))
+                        ETInstantaneous.Add(0) : If WeatherPointIndex.InstantaneousShortReferenceEvapotranspiration > -1 Then ETInstantaneous(Count) = CleanNull(WeatherRow.Value(WeatherPointIndex.InstantaneousShortReferenceEvapotranspiration))
+                        Irrigation.Add(0) : If WeatherPointIndex.Irrigation > -1 Then Irrigation(Count) = CleanNull(WeatherRow.Value(WeatherPointIndex.Irrigation))
+                        RelativeHumidity.Add(0) : If WeatherPointIndex.RelativeHumidity > -1 Then CleanNull(RelativeHumidity(Count) = WeatherRow.Value(WeatherPointIndex.RelativeHumidity))
+                        Precipitation.Add(0) : If WeatherPointIndex.Precipitation > -1 Then Precipitation(Count) = CleanNull(WeatherRow.Value(WeatherPointIndex.Precipitation))
+                        ETDailyReference.Add(0) : If WeatherPointIndex.ShortReferenceEvapotranspiration > -1 Then ETDailyReference(Count) = CleanNull(WeatherRow.Value(WeatherPointIndex.ShortReferenceEvapotranspiration))
+                        SolarRadiation.Add(0) : If WeatherPointIndex.SolarRadiation > -1 Then SolarRadiation(Count) = CleanNull(WeatherRow.Value(WeatherPointIndex.SolarRadiation))
+                        WindSpeed.Add(0) : If WeatherPointIndex.WindSpeed > -1 Then WindSpeed(Count) = CleanNull(WeatherRow.Value(WeatherPointIndex.WindSpeed))
+                        Count += 1
+                    End If
+                End If
+                WeatherRow = WeatherCursor.NextRow()
+            Loop
+            System.Runtime.InteropServices.Marshal.ReleaseComObject(WeatherCursor)
+        End Sub
+
+        Sub Populate(ByVal WeatherTable As ESRI.ArcGIS.Geodatabase.ITable, ByVal WeatherPointIndex As WeatherPointIndex, ByVal Year As Integer)
+            ActualVaporPressure.Clear()
+            AirTemperature.Clear()
+            AnemometerReferenceHeight.Clear()
+            AirTemperatureReferenceHeight.Clear()
+            AtmosphericPressure.Clear()
+            WeatherPoint.CoverName.Clear()
+            Irrigation.Clear()
+            RelativeHumidity.Clear()
+            Precipitation.Clear()
+            ETDailyReference.Clear()
+            ETInstantaneous.Clear()
+            SolarRadiation.Clear()
+            WindSpeed.Clear()
+            RecordDate.Clear()
+
+            Dim WeatherCursor As ESRI.ArcGIS.Geodatabase.ICursor = WeatherTable.Search(Nothing, True)
+            Dim WeatherRow As ESRI.ArcGIS.Geodatabase.IRow = WeatherCursor.NextRow()
+            Dim Count As Integer = 0
+            Do While Not WeatherRow Is Nothing
+                Try
+                    If Not IsDBNull(WeatherRow.Value(WeatherPointIndex.RecordDate)) Then
+                        Dim DateStamp As DateTime = CDate(WeatherRow.Value(WeatherPointIndex.RecordDate))
+                        If DateStamp.Year = Year And Not RecordDate.Contains(DateStamp) Then
+                            AnemometerReferenceHeight.Add(0) : If WeatherPointIndex.AnemometerReferenceHeight > -1 Then AnemometerReferenceHeight(Count) = WeatherRow.Value(WeatherPointIndex.AnemometerReferenceHeight)
+                            Irrigation.Add(0) : If WeatherPointIndex.Irrigation > -1 Then Irrigation(Count) = WeatherRow.Value(WeatherPointIndex.Irrigation)
+                            RelativeHumidity.Add(0) : If WeatherPointIndex.Irrigation > -1 Then RelativeHumidity(Count) = WeatherRow.Value(WeatherPointIndex.RelativeHumidity)
+                            Precipitation.Add(0) : If WeatherPointIndex.Precipitation > -1 Then Precipitation(Count) = WeatherRow.Value(WeatherPointIndex.Precipitation)
+                            ETDailyReference.Add(0) : If WeatherPointIndex.ShortReferenceEvapotranspiration > -1 Then ETDailyReference(Count) = WeatherRow.Value(WeatherPointIndex.ShortReferenceEvapotranspiration)
+                            WindSpeed.Add(0) : If WeatherPointIndex.WindSpeed > -1 Then WindSpeed(Count) = WeatherRow.Value(WeatherPointIndex.WindSpeed)
+                            RecordDate.Add(DateStamp)
+                            Count += 1
+                        End If
+                    End If
+                    WeatherRow = WeatherCursor.NextRow()
+                Catch ex As Exception
+                    MsgBox(ex.Message)
+                End Try
+            Loop
+            System.Runtime.InteropServices.Marshal.ReleaseComObject(WeatherCursor)
+        End Sub
+
+    End Class
+
+    Class WeatherPointIndex
+        Public RecordDate As Integer
+        Public ActualVaporPressure As Integer
+        Public AirTemperature As Integer
+        Public AnemometerReferenceHeight As Integer
+        Public AirTemperatureReferenceHeight As Integer
+        Public AtmosphericPressure As Integer
+        Public CoverHeight As Integer
+        Public CoverName As Integer
+        Public Irrigation As Integer
+        Public Precipitation As Integer
+        Public RelativeHumidity As Integer
+        Public ShortReferenceEvapotranspiration As Integer
+        Public InstantaneousShortReferenceEvapotranspiration As Integer
+        Public SolarRadiation As Integer
+        Public WindSpeed As Integer
+
+        Public Sub Initialize()
+            RecordDate = -1
+            ActualVaporPressure = -1
+            AirTemperature = -1
+            AnemometerReferenceHeight = -1
+            AirTemperatureReferenceHeight = -1
+            AtmosphericPressure = -1
+            CoverHeight = -1
+            CoverName = -1
+            Irrigation = -1
+            Precipitation = -1
+            RelativeHumidity = -1
+            ShortReferenceEvapotranspiration = -1
+            InstantaneousShortReferenceEvapotranspiration = -1
+            SolarRadiation = -1
+            WindSpeed = -1
+        End Sub
+
+    End Class
+
+    Class WeatherGrid
+        Public Temperature As New List(Of String)
+        Public SpecificHumidity As New List(Of String)
+        Public Pressure As New List(Of String)
+        Public WindSpeed As New List(Of String)
+        Public Radiation As New List(Of String)
+        Public ETDailyActual As New List(Of String)
+        Public ETDailyReference As New List(Of String)
+        Public ETInstantaneous As New List(Of String)
+
+        Sub Clear()
+            Temperature.Clear()
+            SpecificHumidity.Clear()
+            Pressure.Clear()
+            WindSpeed.Clear()
+            Radiation.Clear()
+            ETDailyActual.Clear()
+            ETDailyReference.Clear()
+            ETInstantaneous.Clear()
+        End Sub
+
+        Function AllValues() As List(Of String)
+            Dim All As New List(Of String)
+
+            All.AddRange(Temperature)
+            All.AddRange(SpecificHumidity)
+            All.AddRange(Pressure)
+            All.AddRange(WindSpeed)
+            All.AddRange(Radiation)
+            All.AddRange(ETDailyActual)
+            All.AddRange(ETDailyReference)
+            All.AddRange(ETInstantaneous)
+
+            Return All
+        End Function
+
+    End Class
+
+    Class WeatherGridIndex
+        Public Temperature As Integer
+        Public SpecificHumidity As Integer
+        Public Pressure As Integer
+        Public WindSpeed As Integer
+        Public Radiation As Integer
+        Public ETDailyActual As Integer
+        Public ETDailyReference As Integer
+        Public ETInstantaneous As Integer
+
+        Public Sub Initialize(ByVal RecordDate As DateTime, ByVal WeatherGrid As WeatherGrid, ByVal Offset As Integer)
+            Temperature = GetSameDateImageIndex(RecordDate, WeatherGrid.Temperature)
+            If Temperature > -1 Then : Temperature += Offset : Offset += WeatherGrid.Temperature.Count : End If
+
+            SpecificHumidity = GetSameDateImageIndex(RecordDate, WeatherGrid.SpecificHumidity)
+            If SpecificHumidity > -1 Then : SpecificHumidity += Offset : Offset += WeatherGrid.SpecificHumidity.Count : End If
+
+            Pressure = GetSameDateImageIndex(RecordDate, WeatherGrid.Pressure)
+            If Pressure > -1 Then : Pressure += Offset : Offset += WeatherGrid.Pressure.Count : End If
+
+            WindSpeed = GetSameDateImageIndex(RecordDate, WeatherGrid.WindSpeed)
+            If WindSpeed > -1 Then : WindSpeed += Offset : Offset += WeatherGrid.WindSpeed.Count : End If
+
+            Radiation = GetSameDateImageIndex(RecordDate, WeatherGrid.Radiation)
+            If Radiation > -1 Then : Radiation += Offset : Offset += WeatherGrid.Radiation.Count : End If
+
+            ETDailyActual = GetSameDateImageIndex(RecordDate, WeatherGrid.ETDailyActual)
+            If ETDailyActual > -1 Then : ETDailyActual += Offset : Offset += WeatherGrid.ETDailyActual.Count : End If
+
+            ETDailyReference = GetSameDateImageIndex(RecordDate, WeatherGrid.ETDailyReference)
+            If ETDailyReference > -1 Then : ETDailyReference += Offset : Offset += WeatherGrid.ETDailyReference.Count : End If
+
+            ETInstantaneous = GetSameDateImageIndex(RecordDate, WeatherGrid.ETInstantaneous)
+            If ETInstantaneous > -1 Then : ETInstantaneous += Offset : Offset += WeatherGrid.ETInstantaneous.Count : End If
+        End Sub
+
+    End Class
+
+    Class Clumping_Output
+        Public Clump0 As Single
+        Public ClumpSun As Single
+        Public ClumpView As Single
+    End Class
+
+    Class EnergyComponents_Output
+        Public RnCanopy As Single
+        Public RnSoil As Single
+        Public RnTotal As Single
+        Public HTotal As Single
+        Public ETotal As Single
+        Public GTotal As Single
+        Public Hcanopy As Single
+        Public Hsoil As Single
+        Public Ecanopy As Single
+        Public EVsoil As Single
+        Public Stability As Integer
+    End Class
+
+    Class RnCoefficients_Output
+        Public TauSolar As Single
+        Public TauThermal As Single
+        Public AlbCanopy As Single
+        Public AlbSoil As Single
+    End Class
+
+    Class TInitial_Output
+        Public Tsoil As Single
+        Public Tcanopy As Single
+        Public Tac As Single
+    End Class
+
+    Class W_Output
+        Public Cp_TSM As Single
+        Public Gamma As Single
+        Public Cp2 As Single
+        Public Cp2P As Single
+        Public W As Single
+    End Class
+
+    Class Resistances_Output
+        Public Ucanopy As Single
+        Public Usoil As Single
+        Public UdoZom As Single
+        Public Ustar As Single
+        Public Ra As Single
+        Public Rex As Single
+        Public Rx As Single
+        Public Rah As Single
+        Public Rsoil As Single
+        Public y_m As Single
+        Public y_h As Single
+    End Class
+
+    Class WaterBalance_ImageOverpassOutput
+        Public RecordDate As DateTime
+        Public Ke As Single
+        Public Ks As Single
+        Public Kcb_FAO As Single
+        Public Kcb_VI As Single
+        Public RootDepth As Single
+        Public FieldCapacity As Single
+        Public SoilMoisture As Single
+        Public ETo As Single
+        Public ET_Kcb As Single
+        Public ET_EB As Single
+        Public ET_As As Single
+
+        Sub New(ByRef RecordDate As DateTime, ByRef Ke As Single, ByRef Ks As Single, ByRef Kcb_FAO As Single, ByRef Kcb_VI As Single, ByRef RootDepth As Single, ByRef FieldCapacity As Single, ByRef SoilMoisture As Single, ByRef ETo As Single, ByRef ET_Kcb As Single, ByRef ET_EB As Single, ByRef ET_As As Single)
+            Me.RecordDate = RecordDate
+            Me.Ke = Ke
+            Me.Ks = Ks
+            Me.Kcb_FAO = Kcb_FAO
+            Me.Kcb_VI = Kcb_VI
+            Me.RootDepth = RootDepth
+            Me.FieldCapacity = FieldCapacity
+            Me.SoilMoisture = SoilMoisture
+            Me.ETo = ETo
+            Me.ET_Kcb = ET_Kcb
+            Me.ET_EB = ET_EB
+            Me.ET_As = ET_As
+        End Sub
+
+        Public Function WriteDelimited() As String
+            Dim SB As New System.Text.StringBuilder
+            SB.Append(RecordDate.ToString("MM/dd/yyyy  HH-mm"))
+            SB.Append("," & Ke)
+            SB.Append("," & Ks)
+            SB.Append("," & Kcb_FAO)
+            SB.Append("," & Kcb_VI)
+            SB.Append("," & RootDepth)
+            SB.Append("," & FieldCapacity)
+            SB.Append("," & SoilMoisture)
+            SB.Append("," & ETo)
+            SB.Append("," & ET_Kcb)
+            SB.Append("," & ET_EB)
+            SB.Append("," & ET_As)
+
+            Return SB.ToString
+        End Function
+
+    End Class
+
+    Class WaterBalance_SeasonOutput
+        Public RecordDate As DateTime
+        Public ETo As Single
+        Public ETa As Single
+        Public Depletion As Single
+        Public Kcb As Single
+        Public Ke As Single
+        Public Ks As Single
+        Public RootDepth As Single
+
+        Sub New(ByRef RecordDate As DateTime, ByRef ETo As Single, ByRef ETa As Single, ByRef Depletion As Single, ByRef Kcb As Single, ByRef Ke As Single, ByRef Ks As Single, ByRef RootDepth As Single)
+            Me.RecordDate = RecordDate
+            Me.ETo = ETo
+            Me.ETa = ETa
+            Me.Depletion = Depletion
+            Me.Kcb = Kcb
+            Me.Ke = Ke
+            Me.Ks = Ks
+            Me.RootDepth = RootDepth
+        End Sub
+
+        Public Function WriteDelimited() As String
+            Dim SB As New System.Text.StringBuilder
+            SB.Append(RecordDate.ToString("MM/dd/yyyy  HH-mm"))
+            SB.Append("," & ETo)
+            SB.Append("," & ETa)
+            SB.Append("," & Depletion)
+            SB.Append("," & Kcb)
+            SB.Append("," & Ke)
+            SB.Append("," & Ks)
+            SB.Append("," & RootDepth)
+
+            Return SB.ToString
+        End Function
+
+    End Class
+
+    Class Bioproperties
+        Public AlphaVIS As Single
+        Public AlphaNIR As Single
+        Public AlphaTIR As Single
+        Public s As Single
+        Public Wc As Single
+    End Class
+
+#End Region
+
+End Module
