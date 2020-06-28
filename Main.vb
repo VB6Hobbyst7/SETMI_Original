@@ -7294,6 +7294,7 @@
 #End Region
 
     Private Sub HelpfulButton_Click(sender As Object, e As EventArgs) Handles HelpfulButton.Click
+
         MsgBox("Exhaustive help information has Not been added at this time. However, help messages may be accessed by clicking On labels throughout the SETMI Interface. This code was developed at Utah State University And modified at the University Of Nebraska-Lincoln Using educational licenses Of Visual Studio, professional licenses Of VS2012 And VS2015 must be purchased If this software Is comercialized. This version includes code modifications based On PyTSEB by Hector Nieto As Shared by Bill Kustas, these portions are copywrighted undr the GNU Public License, see https://github.com/hectornieto/pyTSEB") 'added by JBB
         MsgBox("Energy Balance may work best if run in blank .mxd, Water Balance should be run in an .mxd with a map layer within the study area so that points can be properly selected")
         MsgBox("Since conversion to ArcGIS v 10.4, SETMI saves some temporary files in the C:\Users\myname\AppData\Local\Temp\  path, which are not automatically deleted. The user should periodically check this path and carefully remove any g_g###.aux.xml files with corresponding g_g### subfolders, and any tmp###.img, tmp###.img.aux.xml and tmp###.tmp files. These latter files are related to the intersect rasters. The processing steps generating the g_g files is unknown at present.")
