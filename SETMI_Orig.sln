@@ -1,7 +1,9 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Basic Express 2010
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "SETMI", "SETMI.vbproj", "{9C26FD1E-76EB-429A-894B-A89F32788929}"
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.1145
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "SETMI_Orig", "SETMI_Orig.vbproj", "{9C26FD1E-76EB-429A-894B-A89F32788929}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -16,5 +18,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4F204568-14FE-421C-B17A-03D0527067AF}
 	EndGlobalSection
 EndGlobal
