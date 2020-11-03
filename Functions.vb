@@ -581,7 +581,7 @@
         Dim LAI As Single = -9999
 
         Select Case Cover
-            Case Functions.Cover.Agriculture
+            Case Cover.Agriculture
                 LAI = 0.03399 * Math.Exp(6.218 * Limit(SAVI, 0.17, 0.7))
             Case Functions.Cover.Corn, Functions.Cover.Soybean
                 'LAI = (2.88 * NDWI + 1.14) * (1 + 0.1039 * Math.Exp(4.1 * NDWI)) '(the 2.615 was 2.88 Anderson et al 2004
@@ -2299,6 +2299,8 @@ ByVal Cp As Single, ByVal z As Single, ByVal Gravity As Single) As Resistances_O
                             Return SAVI * 1.587 + 0.007
                         Case Functions.Cover.Dryland_Cotton
                             Return SAVI * 1.587 + 0.007
+                        Case Functions.Cover.Sugar_Cane '@Ashish: Added Sugarcane Kcb calculation capablity
+                            Return SAVI * 1.5567 - 0.0356
                         Case Else
                             Return 0
                     End Select
@@ -2358,13 +2360,7 @@ ByVal Cp As Single, ByVal z As Single, ByVal Gravity As Single) As Resistances_O
         Select Case ETReferenceType
             Case Functions.ETReferenceType.Short_Grass
                 Select Case Cover
-                    Case Functions.Cover.Corn
-                        Return AllKcbVI.SAVI
-                    Case Functions.Cover.Soybean
-                        Return AllKcbVI.SAVI
-                    Case Functions.Cover.Cotton
-                        Return AllKcbVI.SAVI
-                    Case Functions.Cover.Dryland_Cotton
+                    Case Functions.Cover.Corn, Cover.Soybean, Cover.Cotton, Cover.Dryland_Cotton
                         Return AllKcbVI.SAVI
                     Case Else
                         Return AllKcbVI.SAVI
@@ -3195,7 +3191,10 @@ ByVal Cp As Single, ByVal z As Single, ByVal Gravity As Single) As Resistances_O
                     If CDate(WeatherRow.Value(WeatherPointIndex.RecordDate)) = RecordDate.Date Then
                         ActualVaporPressure.Add(0) : If WeatherPointIndex.ActualVaporPressure > -1 Then ActualVaporPressure(Count) = CleanNull(WeatherRow.Value(WeatherPointIndex.ActualVaporPressure))
                         AirTemperature.Add(0) : If WeatherPointIndex.AirTemperature > -1 Then AirTemperature(Count) = CleanNull(WeatherRow.Value(WeatherPointIndex.AirTemperature))
-                        AnemometerReferenceHeight.Add(0) : If WeatherPointIndex.AnemometerReferenceHeight > -1 Then AnemometerReferenceHeight(Count) = CleanNull(WeatherRow.Value(WeatherPointIndex.AnemometerReferenceHeight))
+                        AnemometerReferenceHeight.Add(0)
+                        If WeatherPointIndex.AnemometerReferenceHeight > -1 Then
+                            AnemometerReferenceHeight(Count) = CleanNull(WeatherRow.Value(WeatherPointIndex.AnemometerReferenceHeight))
+                        End If
                         AirTemperatureReferenceHeight.Add(0) : If WeatherPointIndex.AirTemperatureReferenceHeight > -1 Then AirTemperatureReferenceHeight(Count) = CleanNull(WeatherRow.Value(WeatherPointIndex.AirTemperatureReferenceHeight))
                         AtmosphericPressure.Add(0) : If WeatherPointIndex.AtmosphericPressure > -1 Then AtmosphericPressure(Count) = CleanNull(WeatherRow.Value(WeatherPointIndex.AtmosphericPressure))
                         CoverName.Add(0) : If WeatherPointIndex.CoverName > -1 Then CoverName(Count) = CleanNull(WeatherRow.Value(WeatherPointIndex.CoverName))
