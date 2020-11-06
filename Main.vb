@@ -4071,7 +4071,7 @@
                                     If OutputImagesBoxEnergy.GetItemChecked(1) Then OutPixels(CountOut).SetValue(Clean(To_Out), {Col, Row}) : CountOut += 1 'modified by JBB 2/1/2018
 
                                     '@Ashish; "Albedo_Out" out was used but it is outside the scope of Energy Balance Switch Case statement and the values weren't updateing, it resulted in zeros 
-                                    ' irrespective of input NIR, Red & Green values.
+                                    ' irrespective of input NIR, Red & Green values, therefore disabled "Albedo_Out" and enabled "Albedo" in next 2 lines.
                                     'If OutputImagesBoxEnergy.GetItemChecked(2) Then OutPixels(CountOut).SetValue(Clean(Albedo_Out), {Col, Row}) : CountOut += 1 'modified by JBB 2/1/2018
                                     If OutputImagesBoxEnergy.GetItemChecked(2) Then OutPixels(CountOut).SetValue(Clean(Albedo), {Col, Row}) : CountOut += 1 'modified by JBB 2/1/2018
                                     If OutputImagesBoxEnergy.GetItemChecked(3) Then OutPixels(CountOut).SetValue(Clean(MaximumCoverHeight), {Col, Row}) : CountOut += 1 'added by JBB

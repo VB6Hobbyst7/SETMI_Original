@@ -1605,8 +1605,10 @@ ByVal Cp As Single, ByVal z As Single, ByVal Gravity As Single) As Resistances_O
     End Function
 
     Function CoverProperties(ByVal cover As Cover)
+        '@Ashish CoverProperties matches the DataGrieView columns indexes 4 to 32 in SETMI Main Window.
+        '@Ashish Crop type is seleceted based on its Name from drop-down list in DataGridView and should match cover attribute
+        ' from the classified image.
         'classes are based on the NLCD
-
         ',,,,"α Leaf VIS" "α Leaf NIR" "α Leaf TIR" "α Dead VIS" "α Dead NIR" "α Dead TIR" "fg" "Hc min" "Hc max" "s" "Wc" "ε Soil VIS" "ε Soil NIR" "ε Soil TIR" "Ag" "D" "alphaPT" "Rc ini" "Rc Max"  "Fc VI" "VI Max" "VI Min" "VI Exponent" "Kcbrf VI" "Kcbrf Slope" "Kcbrf Incpt" "Kcbrf Max" "Kcbrf Min" JBB added the last three soil terms here and in all the lists below
 
         Dim Water = {-999, -999, -999, -999, -999, -999, -999, -999, -999, -999, -999, -999, -999, -999, -999, -999, -999, -999, -999, -999, "Hardcoded", -999, -999, -999, "Hardcoded", -999, -999, -999, 999}              'Water_bodies
