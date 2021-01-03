@@ -4,7 +4,8 @@
 
     Public Function CreateTable(ByVal Path As String) As ESRI.ArcGIS.Geodatabase.ITable
         Dim GPUtilities As ESRI.ArcGIS.Geoprocessing.IGPUtilities = New ESRI.ArcGIS.Geoprocessing.GPUtilities
-        Return GPUtilities.OpenTableFromString(Path) 'Opens a table, this is used to load .xls files and to populate other database tables JBB
+        Dim output As ESRI.ArcGIS.Geodatabase.ITable = GPUtilities.OpenTableFromString(Path) 'Opens a table, this is used to load .xls files and to populate other database tables JBB
+        Return output
     End Function
 
     Public Function CreateRasterDataset(ByVal Path As String) As ESRI.ArcGIS.Geodatabase.IRasterDataset
@@ -4209,7 +4210,7 @@
         Dim UID As New ESRI.ArcGIS.esriSystem.UID
         UID.Value = "SETMI.Coordinatetool"
 
-        Dim CommandItem As ESRI.ArcGIS.Framework.ICommandItem = SETMItool.ArcApplication.Document.CommandBars.Find(UID)
+        Dim CommandItem As ESRI.ArcGIS.Framework.ICommandItem = SETMItool_Original.ArcApplication.Document.CommandBars.Find(UID)
         Dim Command As ESRI.ArcGIS.SystemUI.ICommand = CommandItem.Command
         Dim CoordinateData As Coordinatetool = CType(Command, Coordinatetool)
 
@@ -4903,7 +4904,8 @@
                                 Dim PixelLatitude As Single = 0 'Define pixel lat JBB
                                 Dim PixelLongitude As Single = 0 'Define pixel lat JBB
                                 IntersectRaster2.PixelToMap(InRasterCursor(0).TopLeft.X + Col, InRasterCursor(0).TopLeft.Y + Row, PixelLongitude, PixelLatitude) 'From ESRI PixelToMap "Converts a location (column, row) in pixel space into map space" JBB
-
+                                Dim BottomRightX As Single = PixelLongitude + MultispectralPixelBlock(0).Width * IntersectRasterValue.RasterStorageDef.CellSize.X
+                                Dim BottomRightY As Single = PixelLatitude + MultispectralPixelBlock(0).Height * IntersectRasterValue.RasterStorageDef.CellSize.Y
                                 Dim PixelIndex As Integer = -1
                                 Try
                                     For S = 0 To SelectedLatitude.Count - 1

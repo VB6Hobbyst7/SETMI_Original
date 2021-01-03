@@ -2334,6 +2334,8 @@ ByVal Cp As Single, ByVal z As Single, ByVal Gravity As Single) As Resistances_O
                             Return 0
                         Case Functions.Cover.Dryland_Cotton
                             Return 0
+                        Case Functions.Cover.Sugar_Cane '@Ashish: Added Sugarcane Kcb calculation capablity
+                            Return SAVI * 1.5567 - 0.0356
                         Case Else
                             Return 0
                     End Select

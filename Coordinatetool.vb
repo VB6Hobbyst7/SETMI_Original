@@ -93,7 +93,7 @@ Public NotInheritable Class Coordinatetool
     End Sub
 
     Public Overrides Sub OnMouseDown(button As Integer, shift As Integer, x As Integer, y As Integer)
-        Dim Point = SETMItool.ArcMapDocument.ActiveView.ScreenDisplay.DisplayTransformation.ToMapPoint(x, y)
+        Dim Point = SETMItool_Original.ArcMapDocument.ActiveView.ScreenDisplay.DisplayTransformation.ToMapPoint(x, y)
 
         Dim Duplicate As Boolean = False
         For Each Row As Windows.Forms.DataGridViewRow In Main.CalculationCoordinatesGrid.Rows
@@ -109,11 +109,11 @@ Public NotInheritable Class Coordinatetool
 
             Dim SpatialReference As ESRI.ArcGIS.Geometry.ISpatialReference = ArcMapDocument.ActiveView.Extent.SpatialReference
             If SpatialReference IsNot Nothing Then
-                Main.CalculationCoordinatesGrid.Rows(Main.CalculationCoordinatesGrid.RowCount - 1).Cells(2).Value = SpatialReference.Name & " (" & SpatialReference.FactoryCode & ")"
+                Main.CalculationCoordinatesGrid.Rows(Main.CalculationCoordinatesGrid.RowCount - 1).Cells(2).Value = SpatialReference.Name & " (EPSG: " & SpatialReference.FactoryCode & ")"
             End If
         End If
 
-        SETMItool.MainForm.Show()
+        SETMItool_Original.MainForm.Show()
     End Sub
 
 End Class

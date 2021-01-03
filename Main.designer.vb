@@ -418,7 +418,7 @@ Partial Class Main
         Me.Label84.Location = New System.Drawing.Point(548, 583)
         Me.Label84.Margin = New System.Windows.Forms.Padding(3, 10, 3, 3)
         Me.Label84.Name = "Label84"
-        Me.Label84.Size = New System.Drawing.Size(238, 16)
+        Me.Label84.Size = New System.Drawing.Size(180, 14)
         Me.Label84.TabIndex = 105
         Me.Label84.Text = "        Skin Layer Evaporation Method"
         '
@@ -480,7 +480,7 @@ Partial Class Main
         Me.SkinLyrMethodBox.Location = New System.Drawing.Point(551, 603)
         Me.SkinLyrMethodBox.Margin = New System.Windows.Forms.Padding(10, 3, 10, 3)
         Me.SkinLyrMethodBox.Name = "SkinLyrMethodBox"
-        Me.SkinLyrMethodBox.Size = New System.Drawing.Size(250, 24)
+        Me.SkinLyrMethodBox.Size = New System.Drawing.Size(250, 22)
         Me.SkinLyrMethodBox.TabIndex = 104
         '
         'Label82
@@ -493,7 +493,7 @@ Partial Class Main
         Me.Label82.Location = New System.Drawing.Point(548, 636)
         Me.Label82.Margin = New System.Windows.Forms.Padding(3, 10, 3, 3)
         Me.Label82.Name = "Label82"
-        Me.Label82.Size = New System.Drawing.Size(254, 16)
+        Me.Label82.Size = New System.Drawing.Size(193, 14)
         Me.Label82.TabIndex = 103
         Me.Label82.Text = "        Evap. Layer Transpiration Method"
         '
@@ -504,7 +504,7 @@ Partial Class Main
         Me.WBTeMethodBox.Location = New System.Drawing.Point(551, 656)
         Me.WBTeMethodBox.Margin = New System.Windows.Forms.Padding(10, 3, 10, 3)
         Me.WBTeMethodBox.Name = "WBTeMethodBox"
-        Me.WBTeMethodBox.Size = New System.Drawing.Size(250, 24)
+        Me.WBTeMethodBox.Size = New System.Drawing.Size(250, 22)
         Me.WBTeMethodBox.TabIndex = 102
         '
         'Label58
@@ -517,7 +517,7 @@ Partial Class Main
         Me.Label58.Location = New System.Drawing.Point(548, 524)
         Me.Label58.Margin = New System.Windows.Forms.Padding(3, 10, 3, 3)
         Me.Label58.Name = "Label58"
-        Me.Label58.Size = New System.Drawing.Size(181, 16)
+        Me.Label58.Size = New System.Drawing.Size(136, 14)
         Me.Label58.TabIndex = 101
         Me.Label58.Text = "        Point Location Method"
         '
@@ -528,7 +528,7 @@ Partial Class Main
         Me.WBPntLocMethodBox.Location = New System.Drawing.Point(551, 544)
         Me.WBPntLocMethodBox.Margin = New System.Windows.Forms.Padding(10, 3, 10, 3)
         Me.WBPntLocMethodBox.Name = "WBPntLocMethodBox"
-        Me.WBPntLocMethodBox.Size = New System.Drawing.Size(250, 24)
+        Me.WBPntLocMethodBox.Size = New System.Drawing.Size(250, 22)
         Me.WBPntLocMethodBox.TabIndex = 100
         '
         'PictureBox4
@@ -551,7 +551,7 @@ Partial Class Main
         Me.Label56.Location = New System.Drawing.Point(548, 467)
         Me.Label56.Margin = New System.Windows.Forms.Padding(3, 10, 3, 3)
         Me.Label56.Name = "Label56"
-        Me.Label56.Size = New System.Drawing.Size(233, 16)
+        Me.Label56.Size = New System.Drawing.Size(174, 14)
         Me.Label56.TabIndex = 96
         Me.Label56.Text = "        Deep Percolation Limit Method"
         '
@@ -562,7 +562,7 @@ Partial Class Main
         Me.DPLimitMethodBox.Location = New System.Drawing.Point(551, 487)
         Me.DPLimitMethodBox.Margin = New System.Windows.Forms.Padding(10, 3, 10, 3)
         Me.DPLimitMethodBox.Name = "DPLimitMethodBox"
-        Me.DPLimitMethodBox.Size = New System.Drawing.Size(250, 24)
+        Me.DPLimitMethodBox.Size = New System.Drawing.Size(250, 22)
         Me.DPLimitMethodBox.TabIndex = 95
         '
         'Label57
@@ -575,7 +575,7 @@ Partial Class Main
         Me.Label57.Location = New System.Drawing.Point(548, 410)
         Me.Label57.Margin = New System.Windows.Forms.Padding(3, 10, 3, 3)
         Me.Label57.Name = "Label57"
-        Me.Label57.Size = New System.Drawing.Size(191, 16)
+        Me.Label57.Size = New System.Drawing.Size(147, 14)
         Me.Label57.TabIndex = 94
         Me.Label57.Text = "        Kcb VI Forecast Method"
         '
@@ -586,7 +586,7 @@ Partial Class Main
         Me.SAVIForecastMethodBox.Location = New System.Drawing.Point(551, 430)
         Me.SAVIForecastMethodBox.Margin = New System.Windows.Forms.Padding(10, 3, 10, 3)
         Me.SAVIForecastMethodBox.Name = "SAVIForecastMethodBox"
-        Me.SAVIForecastMethodBox.Size = New System.Drawing.Size(250, 24)
+        Me.SAVIForecastMethodBox.Size = New System.Drawing.Size(250, 22)
         Me.SAVIForecastMethodBox.TabIndex = 93
         '
         'Label54
@@ -599,7 +599,7 @@ Partial Class Main
         Me.Label54.Location = New System.Drawing.Point(198, 524)
         Me.Label54.Margin = New System.Windows.Forms.Padding(3, 10, 3, 3)
         Me.Label54.Name = "Label54"
-        Me.Label54.Size = New System.Drawing.Size(150, 16)
+        Me.Label54.Size = New System.Drawing.Size(112, 14)
         Me.Label54.TabIndex = 92
         Me.Label54.Text = "        Clumping Method"
         '
@@ -610,7 +610,7 @@ Partial Class Main
         Me.ClumpingMethodBox.Location = New System.Drawing.Point(201, 544)
         Me.ClumpingMethodBox.Margin = New System.Windows.Forms.Padding(10, 3, 10, 3)
         Me.ClumpingMethodBox.Name = "ClumpingMethodBox"
-        Me.ClumpingMethodBox.Size = New System.Drawing.Size(250, 24)
+        Me.ClumpingMethodBox.Size = New System.Drawing.Size(250, 22)
         Me.ClumpingMethodBox.TabIndex = 91
         '
         'Label53
@@ -623,7 +623,7 @@ Partial Class Main
         Me.Label53.Location = New System.Drawing.Point(548, 353)
         Me.Label53.Margin = New System.Windows.Forms.Padding(3, 10, 3, 3)
         Me.Label53.Name = "Label53"
-        Me.Label53.Size = New System.Drawing.Size(236, 16)
+        Me.Label53.Size = New System.Drawing.Size(180, 14)
         Me.Label53.TabIndex = 88
         Me.Label53.Text = "        Fraction of Cover Method - WB"
         '
@@ -634,7 +634,7 @@ Partial Class Main
         Me.FcTypeBox.Location = New System.Drawing.Point(551, 373)
         Me.FcTypeBox.Margin = New System.Windows.Forms.Padding(10, 3, 10, 3)
         Me.FcTypeBox.Name = "FcTypeBox"
-        Me.FcTypeBox.Size = New System.Drawing.Size(250, 24)
+        Me.FcTypeBox.Size = New System.Drawing.Size(250, 22)
         Me.FcTypeBox.TabIndex = 87
         '
         'Label52
@@ -647,7 +647,7 @@ Partial Class Main
         Me.Label52.Location = New System.Drawing.Point(198, 467)
         Me.Label52.Margin = New System.Windows.Forms.Padding(3, 10, 3, 3)
         Me.Label52.Name = "Label52"
-        Me.Label52.Size = New System.Drawing.Size(201, 16)
+        Me.Label52.Size = New System.Drawing.Size(153, 14)
         Me.Label52.TabIndex = 86
         Me.Label52.Text = "        Fraction of Cover Method"
         '
@@ -658,7 +658,7 @@ Partial Class Main
         Me.FcMethodBox.Location = New System.Drawing.Point(201, 487)
         Me.FcMethodBox.Margin = New System.Windows.Forms.Padding(10, 3, 10, 3)
         Me.FcMethodBox.Name = "FcMethodBox"
-        Me.FcMethodBox.Size = New System.Drawing.Size(250, 24)
+        Me.FcMethodBox.Size = New System.Drawing.Size(250, 22)
         Me.FcMethodBox.TabIndex = 85
         '
         'Label50
@@ -671,7 +671,7 @@ Partial Class Main
         Me.Label50.Location = New System.Drawing.Point(200, 410)
         Me.Label50.Margin = New System.Windows.Forms.Padding(3, 10, 3, 3)
         Me.Label50.Name = "Label50"
-        Me.Label50.Size = New System.Drawing.Size(184, 16)
+        Me.Label50.Size = New System.Drawing.Size(139, 14)
         Me.Label50.TabIndex = 84
         Me.Label50.Text = "        Canopy Height Method"
         '
@@ -682,7 +682,7 @@ Partial Class Main
         Me.HcMethodBox.Location = New System.Drawing.Point(203, 430)
         Me.HcMethodBox.Margin = New System.Windows.Forms.Padding(10, 3, 10, 3)
         Me.HcMethodBox.Name = "HcMethodBox"
-        Me.HcMethodBox.Size = New System.Drawing.Size(250, 24)
+        Me.HcMethodBox.Size = New System.Drawing.Size(250, 22)
         Me.HcMethodBox.TabIndex = 83
         '
         'Label49
@@ -695,7 +695,7 @@ Partial Class Main
         Me.Label49.Location = New System.Drawing.Point(200, 353)
         Me.Label49.Margin = New System.Windows.Forms.Padding(3, 10, 3, 3)
         Me.Label49.Name = "Label49"
-        Me.Label49.Size = New System.Drawing.Size(108, 16)
+        Me.Label49.Size = New System.Drawing.Size(81, 14)
         Me.Label49.TabIndex = 82
         Me.Label49.Text = "        Fg Method"
         '
@@ -706,7 +706,7 @@ Partial Class Main
         Me.FgMethodBox.Location = New System.Drawing.Point(203, 373)
         Me.FgMethodBox.Margin = New System.Windows.Forms.Padding(10, 3, 10, 3)
         Me.FgMethodBox.Name = "FgMethodBox"
-        Me.FgMethodBox.Size = New System.Drawing.Size(250, 24)
+        Me.FgMethodBox.Size = New System.Drawing.Size(250, 22)
         Me.FgMethodBox.TabIndex = 81
         '
         'Label42
@@ -719,7 +719,7 @@ Partial Class Main
         Me.Label42.Location = New System.Drawing.Point(548, 294)
         Me.Label42.Margin = New System.Windows.Forms.Padding(3, 10, 3, 3)
         Me.Label42.Name = "Label42"
-        Me.Label42.Size = New System.Drawing.Size(195, 16)
+        Me.Label42.Size = New System.Drawing.Size(149, 14)
         Me.Label42.TabIndex = 80
         Me.Label42.Text = "        Kcb Progression Method"
         '
@@ -730,7 +730,7 @@ Partial Class Main
         Me.KcbTypeBox.Location = New System.Drawing.Point(551, 314)
         Me.KcbTypeBox.Margin = New System.Windows.Forms.Padding(10, 3, 10, 3)
         Me.KcbTypeBox.Name = "KcbTypeBox"
-        Me.KcbTypeBox.Size = New System.Drawing.Size(250, 24)
+        Me.KcbTypeBox.Size = New System.Drawing.Size(250, 22)
         Me.KcbTypeBox.TabIndex = 79
         '
         'Label40
@@ -743,7 +743,7 @@ Partial Class Main
         Me.Label40.Location = New System.Drawing.Point(200, 294)
         Me.Label40.Margin = New System.Windows.Forms.Padding(3, 10, 3, 3)
         Me.Label40.Name = "Label40"
-        Me.Label40.Size = New System.Drawing.Size(196, 16)
+        Me.Label40.Size = New System.Drawing.Size(149, 14)
         Me.Label40.TabIndex = 78
         Me.Label40.Text = "        Wind Adjustment Method"
         '
@@ -754,7 +754,7 @@ Partial Class Main
         Me.WindAdjustMethodBox.Location = New System.Drawing.Point(203, 314)
         Me.WindAdjustMethodBox.Margin = New System.Windows.Forms.Padding(10, 3, 10, 3)
         Me.WindAdjustMethodBox.Name = "WindAdjustMethodBox"
-        Me.WindAdjustMethodBox.Size = New System.Drawing.Size(250, 24)
+        Me.WindAdjustMethodBox.Size = New System.Drawing.Size(250, 22)
         Me.WindAdjustMethodBox.TabIndex = 77
         '
         'Label48
@@ -767,7 +767,7 @@ Partial Class Main
         Me.Label48.Location = New System.Drawing.Point(200, 234)
         Me.Label48.Margin = New System.Windows.Forms.Padding(3, 10, 3, 3)
         Me.Label48.Name = "Label48"
-        Me.Label48.Size = New System.Drawing.Size(177, 16)
+        Me.Label48.Size = New System.Drawing.Size(134, 14)
         Me.Label48.TabIndex = 76
         Me.Label48.Text = "        Soil Heat Flux Method"
         '
@@ -778,7 +778,7 @@ Partial Class Main
         Me.SoilHeatFluxBox.Location = New System.Drawing.Point(203, 254)
         Me.SoilHeatFluxBox.Margin = New System.Windows.Forms.Padding(10, 3, 10, 3)
         Me.SoilHeatFluxBox.Name = "SoilHeatFluxBox"
-        Me.SoilHeatFluxBox.Size = New System.Drawing.Size(250, 24)
+        Me.SoilHeatFluxBox.Size = New System.Drawing.Size(250, 22)
         Me.SoilHeatFluxBox.TabIndex = 75
         '
         'Label47
@@ -791,7 +791,7 @@ Partial Class Main
         Me.Label47.Location = New System.Drawing.Point(200, 175)
         Me.Label47.Margin = New System.Windows.Forms.Padding(3, 10, 3, 3)
         Me.Label47.Name = "Label47"
-        Me.Label47.Size = New System.Drawing.Size(198, 16)
+        Me.Label47.Size = New System.Drawing.Size(147, 14)
         Me.Label47.TabIndex = 74
         Me.Label47.Text = "        TSM Initial Temp. Method"
         '
@@ -802,7 +802,7 @@ Partial Class Main
         Me.TSMInitialTemperatureBox.Location = New System.Drawing.Point(203, 195)
         Me.TSMInitialTemperatureBox.Margin = New System.Windows.Forms.Padding(10, 3, 10, 3)
         Me.TSMInitialTemperatureBox.Name = "TSMInitialTemperatureBox"
-        Me.TSMInitialTemperatureBox.Size = New System.Drawing.Size(250, 24)
+        Me.TSMInitialTemperatureBox.Size = New System.Drawing.Size(250, 22)
         Me.TSMInitialTemperatureBox.TabIndex = 73
         '
         'Label45
@@ -825,7 +825,7 @@ Partial Class Main
         Me.EffectivePreciptiationBox.Location = New System.Drawing.Point(551, 254)
         Me.EffectivePreciptiationBox.Margin = New System.Windows.Forms.Padding(10, 3, 10, 3)
         Me.EffectivePreciptiationBox.Name = "EffectivePreciptiationBox"
-        Me.EffectivePreciptiationBox.Size = New System.Drawing.Size(250, 24)
+        Me.EffectivePreciptiationBox.Size = New System.Drawing.Size(250, 22)
         Me.EffectivePreciptiationBox.TabIndex = 69
         '
         'Label44
@@ -838,7 +838,7 @@ Partial Class Main
         Me.Label44.Location = New System.Drawing.Point(548, 175)
         Me.Label44.Margin = New System.Windows.Forms.Padding(3, 10, 3, 3)
         Me.Label44.Name = "Label44"
-        Me.Label44.Size = New System.Drawing.Size(163, 16)
+        Me.Label44.Size = New System.Drawing.Size(123, 14)
         Me.Label44.TabIndex = 68
         Me.Label44.Text = "        ET Reference Type"
         '
@@ -849,7 +849,7 @@ Partial Class Main
         Me.ETReferenceBox.Location = New System.Drawing.Point(551, 195)
         Me.ETReferenceBox.Margin = New System.Windows.Forms.Padding(10, 3, 10, 3)
         Me.ETReferenceBox.Name = "ETReferenceBox"
-        Me.ETReferenceBox.Size = New System.Drawing.Size(250, 24)
+        Me.ETReferenceBox.Size = New System.Drawing.Size(250, 22)
         Me.ETReferenceBox.TabIndex = 67
         '
         'PictureBox3
@@ -873,7 +873,7 @@ Partial Class Main
         Me.Label28.Location = New System.Drawing.Point(548, 120)
         Me.Label28.Margin = New System.Windows.Forms.Padding(3, 10, 3, 3)
         Me.Label28.Name = "Label28"
-        Me.Label28.Size = New System.Drawing.Size(147, 16)
+        Me.Label28.Size = New System.Drawing.Size(112, 14)
         Me.Label28.TabIndex = 62
         Me.Label28.Text = "        Data Assimilation"
         '
@@ -884,7 +884,7 @@ Partial Class Main
         Me.DataAssimilationBox.Location = New System.Drawing.Point(551, 140)
         Me.DataAssimilationBox.Margin = New System.Windows.Forms.Padding(10, 3, 10, 3)
         Me.DataAssimilationBox.Name = "DataAssimilationBox"
-        Me.DataAssimilationBox.Size = New System.Drawing.Size(250, 24)
+        Me.DataAssimilationBox.Size = New System.Drawing.Size(250, 22)
         Me.DataAssimilationBox.TabIndex = 61
         '
         'Label21
@@ -897,7 +897,7 @@ Partial Class Main
         Me.Label21.Location = New System.Drawing.Point(200, 120)
         Me.Label21.Margin = New System.Windows.Forms.Padding(3, 10, 3, 3)
         Me.Label21.Name = "Label21"
-        Me.Label21.Size = New System.Drawing.Size(195, 16)
+        Me.Label21.Size = New System.Drawing.Size(146, 14)
         Me.Label21.TabIndex = 60
         Me.Label21.Text = "        ET Extrapolation Method"
         '
@@ -908,7 +908,7 @@ Partial Class Main
         Me.ETExtrapolationBox.Location = New System.Drawing.Point(203, 140)
         Me.ETExtrapolationBox.Margin = New System.Windows.Forms.Padding(10, 3, 10, 3)
         Me.ETExtrapolationBox.Name = "ETExtrapolationBox"
-        Me.ETExtrapolationBox.Size = New System.Drawing.Size(250, 24)
+        Me.ETExtrapolationBox.Size = New System.Drawing.Size(250, 22)
         Me.ETExtrapolationBox.TabIndex = 59
         '
         'Label20
@@ -921,7 +921,7 @@ Partial Class Main
         Me.Label20.Location = New System.Drawing.Point(500, 64)
         Me.Label20.Margin = New System.Windows.Forms.Padding(3, 10, 3, 3)
         Me.Label20.Name = "Label20"
-        Me.Label20.Size = New System.Drawing.Size(174, 16)
+        Me.Label20.Size = New System.Drawing.Size(133, 14)
         Me.Label20.TabIndex = 58
         Me.Label20.Text = "        Water Balance Model"
         '
@@ -932,7 +932,7 @@ Partial Class Main
         Me.WaterBalanceBox.Location = New System.Drawing.Point(500, 84)
         Me.WaterBalanceBox.Margin = New System.Windows.Forms.Padding(10, 3, 10, 3)
         Me.WaterBalanceBox.Name = "WaterBalanceBox"
-        Me.WaterBalanceBox.Size = New System.Drawing.Size(301, 24)
+        Me.WaterBalanceBox.Size = New System.Drawing.Size(301, 22)
         Me.WaterBalanceBox.TabIndex = 57
         '
         'Label17
@@ -945,7 +945,7 @@ Partial Class Main
         Me.Label17.Location = New System.Drawing.Point(162, 636)
         Me.Label17.Margin = New System.Windows.Forms.Padding(3, 10, 3, 3)
         Me.Label17.Name = "Label17"
-        Me.Label17.Size = New System.Drawing.Size(106, 16)
+        Me.Label17.Size = New System.Drawing.Size(81, 14)
         Me.Label17.TabIndex = 56
         Me.Label17.Text = "        Time Zone"
         '
@@ -957,7 +957,7 @@ Partial Class Main
         Me.TimeZoneBox.Location = New System.Drawing.Point(162, 656)
         Me.TimeZoneBox.Margin = New System.Windows.Forms.Padding(10, 3, 10, 3)
         Me.TimeZoneBox.Name = "TimeZoneBox"
-        Me.TimeZoneBox.Size = New System.Drawing.Size(301, 24)
+        Me.TimeZoneBox.Size = New System.Drawing.Size(301, 22)
         Me.TimeZoneBox.Sorted = True
         Me.TimeZoneBox.TabIndex = 55
         '
@@ -971,7 +971,7 @@ Partial Class Main
         Me.Label8.Location = New System.Drawing.Point(162, 581)
         Me.Label8.Margin = New System.Windows.Forms.Padding(3, 10, 3, 3)
         Me.Label8.Name = "Label8"
-        Me.Label8.Size = New System.Drawing.Size(127, 16)
+        Me.Label8.Size = New System.Drawing.Size(97, 14)
         Me.Label8.TabIndex = 7
         Me.Label8.Text = "        Image Source"
         '
@@ -982,7 +982,7 @@ Partial Class Main
         Me.ImageSourceBox.Location = New System.Drawing.Point(162, 603)
         Me.ImageSourceBox.Margin = New System.Windows.Forms.Padding(10, 3, 10, 3)
         Me.ImageSourceBox.Name = "ImageSourceBox"
-        Me.ImageSourceBox.Size = New System.Drawing.Size(301, 24)
+        Me.ImageSourceBox.Size = New System.Drawing.Size(301, 22)
         Me.ImageSourceBox.TabIndex = 6
         '
         'Label7
@@ -995,7 +995,7 @@ Partial Class Main
         Me.Label7.Location = New System.Drawing.Point(152, 65)
         Me.Label7.Margin = New System.Windows.Forms.Padding(3)
         Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(182, 16)
+        Me.Label7.Size = New System.Drawing.Size(138, 14)
         Me.Label7.TabIndex = 5
         Me.Label7.Text = "        Energy Balance Model"
         '
@@ -1006,7 +1006,7 @@ Partial Class Main
         Me.EnergyBalanceBox.Location = New System.Drawing.Point(152, 85)
         Me.EnergyBalanceBox.Margin = New System.Windows.Forms.Padding(10, 3, 10, 3)
         Me.EnergyBalanceBox.Name = "EnergyBalanceBox"
-        Me.EnergyBalanceBox.Size = New System.Drawing.Size(301, 24)
+        Me.EnergyBalanceBox.Size = New System.Drawing.Size(301, 22)
         Me.EnergyBalanceBox.TabIndex = 4
         '
         'Panel1
@@ -1270,7 +1270,7 @@ Partial Class Main
         Me.DPLimitText.Location = New System.Drawing.Point(28, 1873)
         Me.DPLimitText.Margin = New System.Windows.Forms.Padding(3, 3, 3, 10)
         Me.DPLimitText.Name = "DPLimitText"
-        Me.DPLimitText.Size = New System.Drawing.Size(707, 23)
+        Me.DPLimitText.Size = New System.Drawing.Size(707, 20)
         Me.DPLimitText.TabIndex = 115
         '
         'Label83
@@ -1284,7 +1284,7 @@ Partial Class Main
         Me.Label83.Location = New System.Drawing.Point(15, 1852)
         Me.Label83.Margin = New System.Windows.Forms.Padding(10, 3, 10, 3)
         Me.Label83.Name = "Label83"
-        Me.Label83.Size = New System.Drawing.Size(355, 16)
+        Me.Label83.Size = New System.Drawing.Size(266, 14)
         Me.Label83.TabIndex = 113
         Me.Label83.Text = "        Constant Deep Percolation Limit (optional) (mm/d)"
         '
@@ -1310,7 +1310,7 @@ Partial Class Main
         Me.Label80.AutoSize = True
         Me.Label80.Location = New System.Drawing.Point(19, 1481)
         Me.Label80.Name = "Label80"
-        Me.Label80.Size = New System.Drawing.Size(56, 16)
+        Me.Label80.Size = New System.Drawing.Size(44, 14)
         Me.Label80.TabIndex = 112
         Me.Label80.Text = "Layer 3"
         '
@@ -1321,7 +1321,7 @@ Partial Class Main
         Me.LayerThicknessText3.HideSelection = False
         Me.LayerThicknessText3.Location = New System.Drawing.Point(80, 1477)
         Me.LayerThicknessText3.Name = "LayerThicknessText3"
-        Me.LayerThicknessText3.Size = New System.Drawing.Size(655, 23)
+        Me.LayerThicknessText3.Size = New System.Drawing.Size(655, 20)
         Me.LayerThicknessText3.TabIndex = 111
         '
         'LayerThicknessAdd3
@@ -1349,7 +1349,7 @@ Partial Class Main
         Me.REWText.Location = New System.Drawing.Point(28, 1813)
         Me.REWText.Margin = New System.Windows.Forms.Padding(3, 3, 3, 10)
         Me.REWText.Name = "REWText"
-        Me.REWText.Size = New System.Drawing.Size(707, 23)
+        Me.REWText.Size = New System.Drawing.Size(707, 20)
         Me.REWText.TabIndex = 109
         '
         'Label81
@@ -1363,7 +1363,7 @@ Partial Class Main
         Me.Label81.Location = New System.Drawing.Point(15, 1792)
         Me.Label81.Margin = New System.Windows.Forms.Padding(10, 3, 10, 3)
         Me.Label81.Name = "Label81"
-        Me.Label81.Size = New System.Drawing.Size(346, 16)
+        Me.Label81.Size = New System.Drawing.Size(261, 14)
         Me.Label81.TabIndex = 107
         Me.Label81.Text = "        Readily Evaporable Water Image (optional) (mm)"
         '
@@ -1389,7 +1389,7 @@ Partial Class Main
         Me.Label75.AutoSize = True
         Me.Label75.Location = New System.Drawing.Point(19, 1750)
         Me.Label75.Name = "Label75"
-        Me.Label75.Size = New System.Drawing.Size(56, 16)
+        Me.Label75.Size = New System.Drawing.Size(44, 14)
         Me.Label75.TabIndex = 106
         Me.Label75.Text = "Layer 3"
         '
@@ -1401,7 +1401,7 @@ Partial Class Main
         Me.SaturatedWaterContentText3.Location = New System.Drawing.Point(80, 1747)
         Me.SaturatedWaterContentText3.Margin = New System.Windows.Forms.Padding(3, 3, 3, 10)
         Me.SaturatedWaterContentText3.Name = "SaturatedWaterContentText3"
-        Me.SaturatedWaterContentText3.Size = New System.Drawing.Size(655, 23)
+        Me.SaturatedWaterContentText3.Size = New System.Drawing.Size(655, 20)
         Me.SaturatedWaterContentText3.TabIndex = 105
         '
         'SaturatedWaterContentAdd3
@@ -1426,7 +1426,7 @@ Partial Class Main
         Me.Label76.AutoSize = True
         Me.Label76.Location = New System.Drawing.Point(19, 1714)
         Me.Label76.Name = "Label76"
-        Me.Label76.Size = New System.Drawing.Size(56, 16)
+        Me.Label76.Size = New System.Drawing.Size(44, 14)
         Me.Label76.TabIndex = 103
         Me.Label76.Text = "Layer 2"
         '
@@ -1438,7 +1438,7 @@ Partial Class Main
         Me.SaturatedWaterContentText2.Location = New System.Drawing.Point(80, 1711)
         Me.SaturatedWaterContentText2.Margin = New System.Windows.Forms.Padding(3, 3, 3, 10)
         Me.SaturatedWaterContentText2.Name = "SaturatedWaterContentText2"
-        Me.SaturatedWaterContentText2.Size = New System.Drawing.Size(655, 23)
+        Me.SaturatedWaterContentText2.Size = New System.Drawing.Size(655, 20)
         Me.SaturatedWaterContentText2.TabIndex = 102
         '
         'SaturatedWaterContentAdd2
@@ -1463,7 +1463,7 @@ Partial Class Main
         Me.Label77.AutoSize = True
         Me.Label77.Location = New System.Drawing.Point(19, 1678)
         Me.Label77.Name = "Label77"
-        Me.Label77.Size = New System.Drawing.Size(56, 16)
+        Me.Label77.Size = New System.Drawing.Size(44, 14)
         Me.Label77.TabIndex = 100
         Me.Label77.Text = "Layer 1"
         '
@@ -1475,7 +1475,7 @@ Partial Class Main
         Me.SaturatedWaterContentText.Location = New System.Drawing.Point(80, 1675)
         Me.SaturatedWaterContentText.Margin = New System.Windows.Forms.Padding(3, 3, 3, 10)
         Me.SaturatedWaterContentText.Name = "SaturatedWaterContentText"
-        Me.SaturatedWaterContentText.Size = New System.Drawing.Size(655, 23)
+        Me.SaturatedWaterContentText.Size = New System.Drawing.Size(655, 20)
         Me.SaturatedWaterContentText.TabIndex = 99
         '
         'Label78
@@ -1489,7 +1489,7 @@ Partial Class Main
         Me.Label78.Location = New System.Drawing.Point(15, 1654)
         Me.Label78.Margin = New System.Windows.Forms.Padding(10, 3, 10, 3)
         Me.Label78.Name = "Label78"
-        Me.Label78.Size = New System.Drawing.Size(366, 16)
+        Me.Label78.Size = New System.Drawing.Size(278, 14)
         Me.Label78.TabIndex = 97
         Me.Label78.Text = "        Saturated Volumetric Water Content Images (mm/m)"
         '
@@ -1515,7 +1515,7 @@ Partial Class Main
         Me.Label68.AutoSize = True
         Me.Label68.Location = New System.Drawing.Point(19, 1616)
         Me.Label68.Name = "Label68"
-        Me.Label68.Size = New System.Drawing.Size(56, 16)
+        Me.Label68.Size = New System.Drawing.Size(44, 14)
         Me.Label68.TabIndex = 96
         Me.Label68.Text = "Layer 3"
         '
@@ -1524,7 +1524,7 @@ Partial Class Main
         Me.Label72.AutoSize = True
         Me.Label72.Location = New System.Drawing.Point(19, 1580)
         Me.Label72.Name = "Label72"
-        Me.Label72.Size = New System.Drawing.Size(56, 16)
+        Me.Label72.Size = New System.Drawing.Size(44, 14)
         Me.Label72.TabIndex = 95
         Me.Label72.Text = "Layer 2"
         '
@@ -1533,7 +1533,7 @@ Partial Class Main
         Me.Label73.AutoSize = True
         Me.Label73.Location = New System.Drawing.Point(19, 1544)
         Me.Label73.Name = "Label73"
-        Me.Label73.Size = New System.Drawing.Size(56, 16)
+        Me.Label73.Size = New System.Drawing.Size(44, 14)
         Me.Label73.TabIndex = 94
         Me.Label73.Text = "Layer 1"
         '
@@ -1544,7 +1544,7 @@ Partial Class Main
         Me.HydraulicConductivityText3.HideSelection = False
         Me.HydraulicConductivityText3.Location = New System.Drawing.Point(80, 1613)
         Me.HydraulicConductivityText3.Name = "HydraulicConductivityText3"
-        Me.HydraulicConductivityText3.Size = New System.Drawing.Size(655, 23)
+        Me.HydraulicConductivityText3.Size = New System.Drawing.Size(655, 20)
         Me.HydraulicConductivityText3.TabIndex = 93
         '
         'HydraulicConductivityAdd3
@@ -1571,7 +1571,7 @@ Partial Class Main
         Me.HydraulicConductivityText2.HideSelection = False
         Me.HydraulicConductivityText2.Location = New System.Drawing.Point(80, 1576)
         Me.HydraulicConductivityText2.Name = "HydraulicConductivityText2"
-        Me.HydraulicConductivityText2.Size = New System.Drawing.Size(655, 23)
+        Me.HydraulicConductivityText2.Size = New System.Drawing.Size(655, 20)
         Me.HydraulicConductivityText2.TabIndex = 91
         '
         'HydraulicConductivityAdd2
@@ -1598,7 +1598,7 @@ Partial Class Main
         Me.HydraulicConductivityText.HideSelection = False
         Me.HydraulicConductivityText.Location = New System.Drawing.Point(80, 1541)
         Me.HydraulicConductivityText.Name = "HydraulicConductivityText"
-        Me.HydraulicConductivityText.Size = New System.Drawing.Size(655, 23)
+        Me.HydraulicConductivityText.Size = New System.Drawing.Size(655, 20)
         Me.HydraulicConductivityText.TabIndex = 89
         '
         'Label74
@@ -1612,7 +1612,7 @@ Partial Class Main
         Me.Label74.Location = New System.Drawing.Point(15, 1520)
         Me.Label74.Margin = New System.Windows.Forms.Padding(10, 3, 10, 3)
         Me.Label74.Name = "Label74"
-        Me.Label74.Size = New System.Drawing.Size(342, 16)
+        Me.Label74.Size = New System.Drawing.Size(261, 14)
         Me.Label74.TabIndex = 87
         Me.Label74.Text = "        Saturated Hydraulic Conductivity Images (mm/d)"
         '
@@ -1638,7 +1638,7 @@ Partial Class Main
         Me.Label69.AutoSize = True
         Me.Label69.Location = New System.Drawing.Point(19, 1445)
         Me.Label69.Name = "Label69"
-        Me.Label69.Size = New System.Drawing.Size(56, 16)
+        Me.Label69.Size = New System.Drawing.Size(44, 14)
         Me.Label69.TabIndex = 86
         Me.Label69.Text = "Layer 2"
         '
@@ -1647,7 +1647,7 @@ Partial Class Main
         Me.Label70.AutoSize = True
         Me.Label70.Location = New System.Drawing.Point(19, 1409)
         Me.Label70.Name = "Label70"
-        Me.Label70.Size = New System.Drawing.Size(56, 16)
+        Me.Label70.Size = New System.Drawing.Size(44, 14)
         Me.Label70.TabIndex = 85
         Me.Label70.Text = "Layer 1"
         '
@@ -1658,7 +1658,7 @@ Partial Class Main
         Me.LayerThicknessText2.HideSelection = False
         Me.LayerThicknessText2.Location = New System.Drawing.Point(80, 1441)
         Me.LayerThicknessText2.Name = "LayerThicknessText2"
-        Me.LayerThicknessText2.Size = New System.Drawing.Size(655, 23)
+        Me.LayerThicknessText2.Size = New System.Drawing.Size(655, 20)
         Me.LayerThicknessText2.TabIndex = 82
         '
         'LayerThicknessAdd2
@@ -1685,7 +1685,7 @@ Partial Class Main
         Me.LayerThicknessText.HideSelection = False
         Me.LayerThicknessText.Location = New System.Drawing.Point(80, 1406)
         Me.LayerThicknessText.Name = "LayerThicknessText"
-        Me.LayerThicknessText.Size = New System.Drawing.Size(655, 23)
+        Me.LayerThicknessText.Size = New System.Drawing.Size(655, 20)
         Me.LayerThicknessText.TabIndex = 80
         '
         'Label71
@@ -1699,7 +1699,7 @@ Partial Class Main
         Me.Label71.Location = New System.Drawing.Point(15, 1385)
         Me.Label71.Margin = New System.Windows.Forms.Padding(10, 3, 10, 3)
         Me.Label71.Name = "Label71"
-        Me.Label71.Size = New System.Drawing.Size(218, 16)
+        Me.Label71.Size = New System.Drawing.Size(167, 14)
         Me.Label71.TabIndex = 78
         Me.Label71.Text = "        Layer Thickness Images (m)"
         '
@@ -1725,7 +1725,7 @@ Partial Class Main
         Me.Label65.AutoSize = True
         Me.Label65.Location = New System.Drawing.Point(19, 1350)
         Me.Label65.Name = "Label65"
-        Me.Label65.Size = New System.Drawing.Size(56, 16)
+        Me.Label65.Size = New System.Drawing.Size(44, 14)
         Me.Label65.TabIndex = 77
         Me.Label65.Text = "Layer 3"
         '
@@ -1734,7 +1734,7 @@ Partial Class Main
         Me.Label66.AutoSize = True
         Me.Label66.Location = New System.Drawing.Point(19, 1314)
         Me.Label66.Name = "Label66"
-        Me.Label66.Size = New System.Drawing.Size(56, 16)
+        Me.Label66.Size = New System.Drawing.Size(44, 14)
         Me.Label66.TabIndex = 76
         Me.Label66.Text = "Layer 2"
         '
@@ -1743,7 +1743,7 @@ Partial Class Main
         Me.Label67.AutoSize = True
         Me.Label67.Location = New System.Drawing.Point(19, 1278)
         Me.Label67.Name = "Label67"
-        Me.Label67.Size = New System.Drawing.Size(56, 16)
+        Me.Label67.Size = New System.Drawing.Size(44, 14)
         Me.Label67.TabIndex = 75
         Me.Label67.Text = "Layer 1"
         '
@@ -1754,7 +1754,7 @@ Partial Class Main
         Me.InitialSoilMoistureText3.HideSelection = False
         Me.InitialSoilMoistureText3.Location = New System.Drawing.Point(80, 1347)
         Me.InitialSoilMoistureText3.Name = "InitialSoilMoistureText3"
-        Me.InitialSoilMoistureText3.Size = New System.Drawing.Size(655, 23)
+        Me.InitialSoilMoistureText3.Size = New System.Drawing.Size(655, 20)
         Me.InitialSoilMoistureText3.TabIndex = 74
         '
         'InitialSoilMoistureAdd3
@@ -1781,7 +1781,7 @@ Partial Class Main
         Me.InitialSoilMoistureText2.HideSelection = False
         Me.InitialSoilMoistureText2.Location = New System.Drawing.Point(80, 1310)
         Me.InitialSoilMoistureText2.Name = "InitialSoilMoistureText2"
-        Me.InitialSoilMoistureText2.Size = New System.Drawing.Size(655, 23)
+        Me.InitialSoilMoistureText2.Size = New System.Drawing.Size(655, 20)
         Me.InitialSoilMoistureText2.TabIndex = 72
         '
         'InitialSoilMoistureAdd2
@@ -1808,7 +1808,7 @@ Partial Class Main
         Me.WiltingPointText3.HideSelection = False
         Me.WiltingPointText3.Location = New System.Drawing.Point(80, 1216)
         Me.WiltingPointText3.Name = "WiltingPointText3"
-        Me.WiltingPointText3.Size = New System.Drawing.Size(655, 23)
+        Me.WiltingPointText3.Size = New System.Drawing.Size(655, 20)
         Me.WiltingPointText3.TabIndex = 70
         '
         'WiltingPointAdd3
@@ -1835,7 +1835,7 @@ Partial Class Main
         Me.WiltingPointText2.HideSelection = False
         Me.WiltingPointText2.Location = New System.Drawing.Point(80, 1180)
         Me.WiltingPointText2.Name = "WiltingPointText2"
-        Me.WiltingPointText2.Size = New System.Drawing.Size(655, 23)
+        Me.WiltingPointText2.Size = New System.Drawing.Size(655, 20)
         Me.WiltingPointText2.TabIndex = 68
         '
         'WiltingPointAdd2
@@ -1860,7 +1860,7 @@ Partial Class Main
         Me.Label62.AutoSize = True
         Me.Label62.Location = New System.Drawing.Point(19, 1219)
         Me.Label62.Name = "Label62"
-        Me.Label62.Size = New System.Drawing.Size(56, 16)
+        Me.Label62.Size = New System.Drawing.Size(44, 14)
         Me.Label62.TabIndex = 66
         Me.Label62.Text = "Layer 3"
         '
@@ -1869,7 +1869,7 @@ Partial Class Main
         Me.Label63.AutoSize = True
         Me.Label63.Location = New System.Drawing.Point(19, 1183)
         Me.Label63.Name = "Label63"
-        Me.Label63.Size = New System.Drawing.Size(56, 16)
+        Me.Label63.Size = New System.Drawing.Size(44, 14)
         Me.Label63.TabIndex = 65
         Me.Label63.Text = "Layer 2"
         '
@@ -1878,7 +1878,7 @@ Partial Class Main
         Me.Label64.AutoSize = True
         Me.Label64.Location = New System.Drawing.Point(19, 1147)
         Me.Label64.Name = "Label64"
-        Me.Label64.Size = New System.Drawing.Size(56, 16)
+        Me.Label64.Size = New System.Drawing.Size(44, 14)
         Me.Label64.TabIndex = 64
         Me.Label64.Text = "Layer 1"
         '
@@ -1887,7 +1887,7 @@ Partial Class Main
         Me.Label61.AutoSize = True
         Me.Label61.Location = New System.Drawing.Point(19, 1087)
         Me.Label61.Name = "Label61"
-        Me.Label61.Size = New System.Drawing.Size(56, 16)
+        Me.Label61.Size = New System.Drawing.Size(44, 14)
         Me.Label61.TabIndex = 63
         Me.Label61.Text = "Layer 3"
         '
@@ -1899,7 +1899,7 @@ Partial Class Main
         Me.FieldCapacityText3.Location = New System.Drawing.Point(80, 1084)
         Me.FieldCapacityText3.Margin = New System.Windows.Forms.Padding(3, 3, 3, 10)
         Me.FieldCapacityText3.Name = "FieldCapacityText3"
-        Me.FieldCapacityText3.Size = New System.Drawing.Size(655, 23)
+        Me.FieldCapacityText3.Size = New System.Drawing.Size(655, 20)
         Me.FieldCapacityText3.TabIndex = 62
         '
         'FieldCapacityAdd3
@@ -1924,7 +1924,7 @@ Partial Class Main
         Me.Label60.AutoSize = True
         Me.Label60.Location = New System.Drawing.Point(19, 1051)
         Me.Label60.Name = "Label60"
-        Me.Label60.Size = New System.Drawing.Size(56, 16)
+        Me.Label60.Size = New System.Drawing.Size(44, 14)
         Me.Label60.TabIndex = 60
         Me.Label60.Text = "Layer 2"
         '
@@ -1937,7 +1937,7 @@ Partial Class Main
         Me.FieldCapacityText2.Location = New System.Drawing.Point(80, 1048)
         Me.FieldCapacityText2.Margin = New System.Windows.Forms.Padding(3, 3, 3, 10)
         Me.FieldCapacityText2.Name = "FieldCapacityText2"
-        Me.FieldCapacityText2.Size = New System.Drawing.Size(655, 23)
+        Me.FieldCapacityText2.Size = New System.Drawing.Size(655, 20)
         Me.FieldCapacityText2.TabIndex = 59
         '
         'FieldCapacityAdd2
@@ -1962,7 +1962,7 @@ Partial Class Main
         Me.Label59.AutoSize = True
         Me.Label59.Location = New System.Drawing.Point(19, 1015)
         Me.Label59.Name = "Label59"
-        Me.Label59.Size = New System.Drawing.Size(56, 16)
+        Me.Label59.Size = New System.Drawing.Size(44, 14)
         Me.Label59.TabIndex = 57
         Me.Label59.Text = "Layer 1"
         '
@@ -1990,7 +1990,7 @@ Partial Class Main
         Me.FcList.FormattingEnabled = True
         Me.FcList.HorizontalScrollbar = True
         Me.FcList.IntegralHeight = False
-        Me.FcList.ItemHeight = 16
+        Me.FcList.ItemHeight = 14
         Me.FcList.Location = New System.Drawing.Point(18, 858)
         Me.FcList.Margin = New System.Windows.Forms.Padding(3, 3, 3, 10)
         Me.FcList.Name = "FcList"
@@ -2009,7 +2009,7 @@ Partial Class Main
         Me.Label51.Location = New System.Drawing.Point(15, 838)
         Me.Label51.Margin = New System.Windows.Forms.Padding(10, 3, 10, 3)
         Me.Label51.Name = "Label51"
-        Me.Label51.Size = New System.Drawing.Size(192, 16)
+        Me.Label51.Size = New System.Drawing.Size(146, 14)
         Me.Label51.TabIndex = 53
         Me.Label51.Text = "        Fraction of Cover Image"
         '
@@ -2037,7 +2037,7 @@ Partial Class Main
         Me.InitialSoilMoistureText.HideSelection = False
         Me.InitialSoilMoistureText.Location = New System.Drawing.Point(80, 1275)
         Me.InitialSoilMoistureText.Name = "InitialSoilMoistureText"
-        Me.InitialSoilMoistureText.Size = New System.Drawing.Size(655, 23)
+        Me.InitialSoilMoistureText.Size = New System.Drawing.Size(655, 20)
         Me.InitialSoilMoistureText.TabIndex = 52
         '
         'Label41
@@ -2051,7 +2051,7 @@ Partial Class Main
         Me.Label41.Location = New System.Drawing.Point(15, 1254)
         Me.Label41.Margin = New System.Windows.Forms.Padding(10, 3, 10, 3)
         Me.Label41.Name = "Label41"
-        Me.Label41.Size = New System.Drawing.Size(380, 16)
+        Me.Label41.Size = New System.Drawing.Size(286, 14)
         Me.Label41.TabIndex = 50
         Me.Label41.Text = "        Initial Volumetric Soil Moisture Content Images (mm/m)"
         '
@@ -2096,7 +2096,7 @@ Partial Class Main
         Me.ZenithList.FormattingEnabled = True
         Me.ZenithList.HorizontalScrollbar = True
         Me.ZenithList.IntegralHeight = False
-        Me.ZenithList.ItemHeight = 16
+        Me.ZenithList.ItemHeight = 14
         Me.ZenithList.Location = New System.Drawing.Point(18, 706)
         Me.ZenithList.Margin = New System.Windows.Forms.Padding(3, 3, 3, 10)
         Me.ZenithList.Name = "ZenithList"
@@ -2115,7 +2115,7 @@ Partial Class Main
         Me.Label32.Location = New System.Drawing.Point(15, 686)
         Me.Label32.Margin = New System.Windows.Forms.Padding(10, 3, 10, 3)
         Me.Label32.Name = "Label32"
-        Me.Label32.Size = New System.Drawing.Size(160, 16)
+        Me.Label32.Size = New System.Drawing.Size(122, 14)
         Me.Label32.TabIndex = 46
         Me.Label32.Text = "        Zenith Angle Image"
         '
@@ -2160,7 +2160,7 @@ Partial Class Main
         Me.LAIList.FormattingEnabled = True
         Me.LAIList.HorizontalScrollbar = True
         Me.LAIList.IntegralHeight = False
-        Me.LAIList.ItemHeight = 16
+        Me.LAIList.ItemHeight = 14
         Me.LAIList.Location = New System.Drawing.Point(18, 553)
         Me.LAIList.Margin = New System.Windows.Forms.Padding(3, 3, 3, 10)
         Me.LAIList.Name = "LAIList"
@@ -2179,7 +2179,7 @@ Partial Class Main
         Me.Label31.Location = New System.Drawing.Point(15, 533)
         Me.Label31.Margin = New System.Windows.Forms.Padding(10, 3, 10, 3)
         Me.Label31.Name = "Label31"
-        Me.Label31.Size = New System.Drawing.Size(180, 16)
+        Me.Label31.Size = New System.Drawing.Size(139, 14)
         Me.Label31.TabIndex = 42
         Me.Label31.Text = "        Leaf Area Index Image"
         '
@@ -2224,7 +2224,7 @@ Partial Class Main
         Me.VegetationHeightList.FormattingEnabled = True
         Me.VegetationHeightList.HorizontalScrollbar = True
         Me.VegetationHeightList.IntegralHeight = False
-        Me.VegetationHeightList.ItemHeight = 16
+        Me.VegetationHeightList.ItemHeight = 14
         Me.VegetationHeightList.Location = New System.Drawing.Point(18, 400)
         Me.VegetationHeightList.Margin = New System.Windows.Forms.Padding(3, 3, 3, 10)
         Me.VegetationHeightList.Name = "VegetationHeightList"
@@ -2243,7 +2243,7 @@ Partial Class Main
         Me.Label30.Location = New System.Drawing.Point(15, 380)
         Me.Label30.Margin = New System.Windows.Forms.Padding(10, 3, 10, 3)
         Me.Label30.Name = "Label30"
-        Me.Label30.Size = New System.Drawing.Size(193, 16)
+        Me.Label30.Size = New System.Drawing.Size(146, 14)
         Me.Label30.TabIndex = 38
         Me.Label30.Text = "        Vegetation Height Image"
         '
@@ -2272,7 +2272,7 @@ Partial Class Main
         Me.FieldCapacityText.Location = New System.Drawing.Point(80, 1012)
         Me.FieldCapacityText.Margin = New System.Windows.Forms.Padding(3, 3, 3, 10)
         Me.FieldCapacityText.Name = "FieldCapacityText"
-        Me.FieldCapacityText.Size = New System.Drawing.Size(655, 23)
+        Me.FieldCapacityText.Size = New System.Drawing.Size(655, 20)
         Me.FieldCapacityText.TabIndex = 37
         '
         'Label22
@@ -2286,7 +2286,7 @@ Partial Class Main
         Me.Label22.Location = New System.Drawing.Point(15, 991)
         Me.Label22.Margin = New System.Windows.Forms.Padding(10, 3, 10, 3)
         Me.Label22.Name = "Label22"
-        Me.Label22.Size = New System.Drawing.Size(230, 16)
+        Me.Label22.Size = New System.Drawing.Size(173, 14)
         Me.Label22.TabIndex = 35
         Me.Label22.Text = "        Field Capacity Images (mm/m)"
         '
@@ -2314,7 +2314,7 @@ Partial Class Main
         Me.WiltingPointText.HideSelection = False
         Me.WiltingPointText.Location = New System.Drawing.Point(80, 1144)
         Me.WiltingPointText.Name = "WiltingPointText"
-        Me.WiltingPointText.Size = New System.Drawing.Size(655, 23)
+        Me.WiltingPointText.Size = New System.Drawing.Size(655, 20)
         Me.WiltingPointText.TabIndex = 34
         '
         'GroupBox1
@@ -2368,7 +2368,7 @@ Partial Class Main
         Me.MIR2Index.Location = New System.Drawing.Point(607, 23)
         Me.MIR2Index.Margin = New System.Windows.Forms.Padding(1)
         Me.MIR2Index.Name = "MIR2Index"
-        Me.MIR2Index.Size = New System.Drawing.Size(50, 24)
+        Me.MIR2Index.Size = New System.Drawing.Size(50, 22)
         Me.MIR2Index.TabIndex = 77
         '
         'Label10
@@ -2387,7 +2387,7 @@ Partial Class Main
         Me.MIR1Index.Location = New System.Drawing.Point(498, 23)
         Me.MIR1Index.Margin = New System.Windows.Forms.Padding(1)
         Me.MIR1Index.Name = "MIR1Index"
-        Me.MIR1Index.Size = New System.Drawing.Size(50, 24)
+        Me.MIR1Index.Size = New System.Drawing.Size(50, 22)
         Me.MIR1Index.TabIndex = 75
         '
         'Label6
@@ -2406,7 +2406,7 @@ Partial Class Main
         Me.NIRIndex.Location = New System.Drawing.Point(389, 23)
         Me.NIRIndex.Margin = New System.Windows.Forms.Padding(1)
         Me.NIRIndex.Name = "NIRIndex"
-        Me.NIRIndex.Size = New System.Drawing.Size(50, 24)
+        Me.NIRIndex.Size = New System.Drawing.Size(50, 22)
         Me.NIRIndex.TabIndex = 73
         '
         'Label5
@@ -2425,7 +2425,7 @@ Partial Class Main
         Me.BlueIndex.Location = New System.Drawing.Point(280, 23)
         Me.BlueIndex.Margin = New System.Windows.Forms.Padding(1)
         Me.BlueIndex.Name = "BlueIndex"
-        Me.BlueIndex.Size = New System.Drawing.Size(50, 24)
+        Me.BlueIndex.Size = New System.Drawing.Size(50, 22)
         Me.BlueIndex.TabIndex = 71
         '
         'Label4
@@ -2444,7 +2444,7 @@ Partial Class Main
         Me.GreenIndex.Location = New System.Drawing.Point(171, 23)
         Me.GreenIndex.Margin = New System.Windows.Forms.Padding(1)
         Me.GreenIndex.Name = "GreenIndex"
-        Me.GreenIndex.Size = New System.Drawing.Size(50, 24)
+        Me.GreenIndex.Size = New System.Drawing.Size(50, 22)
         Me.GreenIndex.TabIndex = 69
         '
         'Label3
@@ -2464,7 +2464,7 @@ Partial Class Main
         Me.RedIndex.Location = New System.Drawing.Point(62, 23)
         Me.RedIndex.Margin = New System.Windows.Forms.Padding(1)
         Me.RedIndex.Name = "RedIndex"
-        Me.RedIndex.Size = New System.Drawing.Size(50, 24)
+        Me.RedIndex.Size = New System.Drawing.Size(50, 22)
         Me.RedIndex.TabIndex = 67
         '
         'Label14
@@ -2478,7 +2478,7 @@ Partial Class Main
         Me.Label14.Location = New System.Drawing.Point(15, 1123)
         Me.Label14.Margin = New System.Windows.Forms.Padding(10, 3, 10, 3)
         Me.Label14.Name = "Label14"
-        Me.Label14.Size = New System.Drawing.Size(291, 16)
+        Me.Label14.Size = New System.Drawing.Size(217, 14)
         Me.Label14.TabIndex = 32
         Me.Label14.Text = "        Permanent Wilting Point Images (mm/m)"
         '
@@ -2523,7 +2523,7 @@ Partial Class Main
         Me.SurfaceTemperatureList.FormattingEnabled = True
         Me.SurfaceTemperatureList.HorizontalScrollbar = True
         Me.SurfaceTemperatureList.IntegralHeight = False
-        Me.SurfaceTemperatureList.ItemHeight = 16
+        Me.SurfaceTemperatureList.ItemHeight = 14
         Me.SurfaceTemperatureList.Location = New System.Drawing.Point(18, 247)
         Me.SurfaceTemperatureList.Margin = New System.Windows.Forms.Padding(3, 3, 3, 10)
         Me.SurfaceTemperatureList.Name = "SurfaceTemperatureList"
@@ -2542,7 +2542,7 @@ Partial Class Main
         Me.Label1.Location = New System.Drawing.Point(15, 227)
         Me.Label1.Margin = New System.Windows.Forms.Padding(10, 3, 10, 3)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(294, 16)
+        Me.Label1.Size = New System.Drawing.Size(223, 14)
         Me.Label1.TabIndex = 17
         Me.Label1.Text = "        Radiometric Surface Temperature Image"
         '
@@ -2587,7 +2587,7 @@ Partial Class Main
         Me.MultispectralList.FormattingEnabled = True
         Me.MultispectralList.HorizontalScrollbar = True
         Me.MultispectralList.IntegralHeight = False
-        Me.MultispectralList.ItemHeight = 16
+        Me.MultispectralList.ItemHeight = 14
         Me.MultispectralList.Location = New System.Drawing.Point(18, 33)
         Me.MultispectralList.Name = "MultispectralList"
         Me.MultispectralList.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
@@ -2605,7 +2605,7 @@ Partial Class Main
         Me.Label9.Location = New System.Drawing.Point(15, 13)
         Me.Label9.Margin = New System.Windows.Forms.Padding(10, 3, 10, 3)
         Me.Label9.Name = "Label9"
-        Me.Label9.Size = New System.Drawing.Size(161, 16)
+        Me.Label9.Size = New System.Drawing.Size(122, 14)
         Me.Label9.TabIndex = 6
         Me.Label9.Text = "        Multispectral Image"
         '
@@ -2695,7 +2695,7 @@ Partial Class Main
         Me.WBPointOutputText.Location = New System.Drawing.Point(18, 1045)
         Me.WBPointOutputText.Name = "WBPointOutputText"
         Me.WBPointOutputText.ReadOnly = True
-        Me.WBPointOutputText.Size = New System.Drawing.Size(717, 23)
+        Me.WBPointOutputText.Size = New System.Drawing.Size(717, 20)
         Me.WBPointOutputText.TabIndex = 46
         '
         'Label55
@@ -2709,7 +2709,7 @@ Partial Class Main
         Me.Label55.Location = New System.Drawing.Point(10, 1023)
         Me.Label55.Margin = New System.Windows.Forms.Padding(10, 3, 10, 3)
         Me.Label55.Name = "Label55"
-        Me.Label55.Size = New System.Drawing.Size(311, 16)
+        Me.Label55.Size = New System.Drawing.Size(235, 14)
         Me.Label55.TabIndex = 45
         Me.Label55.Text = "        Water Balance Point Output Location Table"
         '
@@ -2757,7 +2757,7 @@ Partial Class Main
         Me.Label36.Location = New System.Drawing.Point(10, 482)
         Me.Label36.Margin = New System.Windows.Forms.Padding(10, 3, 10, 3)
         Me.Label36.Name = "Label36"
-        Me.Label36.Size = New System.Drawing.Size(185, 16)
+        Me.Label36.Size = New System.Drawing.Size(140, 14)
         Me.Label36.TabIndex = 42
         Me.Label36.Text = "        Cover Properties Table"
         '
@@ -2768,7 +2768,7 @@ Partial Class Main
         Me.WaterBalanceOutputDateText.Location = New System.Drawing.Point(18, 876)
         Me.WaterBalanceOutputDateText.Name = "WaterBalanceOutputDateText"
         Me.WaterBalanceOutputDateText.ReadOnly = True
-        Me.WaterBalanceOutputDateText.Size = New System.Drawing.Size(717, 23)
+        Me.WaterBalanceOutputDateText.Size = New System.Drawing.Size(717, 20)
         Me.WaterBalanceOutputDateText.TabIndex = 41
         '
         'CoverClassificationRemove
@@ -2795,7 +2795,7 @@ Partial Class Main
         Me.CoverClassificationList.FormattingEnabled = True
         Me.CoverClassificationList.HorizontalScrollbar = True
         Me.CoverClassificationList.IntegralHeight = False
-        Me.CoverClassificationList.ItemHeight = 16
+        Me.CoverClassificationList.ItemHeight = 14
         Me.CoverClassificationList.Location = New System.Drawing.Point(18, 33)
         Me.CoverClassificationList.Margin = New System.Windows.Forms.Padding(3, 3, 3, 10)
         Me.CoverClassificationList.Name = "CoverClassificationList"
@@ -2814,7 +2814,7 @@ Partial Class Main
         Me.Label2.Location = New System.Drawing.Point(15, 13)
         Me.Label2.Margin = New System.Windows.Forms.Padding(10, 3, 10, 3)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(207, 16)
+        Me.Label2.Size = New System.Drawing.Size(158, 14)
         Me.Label2.TabIndex = 37
         Me.Label2.Text = "        Cover Classification Image"
         '
@@ -2846,7 +2846,7 @@ Partial Class Main
         Me.Label18.Location = New System.Drawing.Point(10, 854)
         Me.Label18.Margin = New System.Windows.Forms.Padding(10, 3, 10, 3)
         Me.Label18.Name = "Label18"
-        Me.Label18.Size = New System.Drawing.Size(293, 16)
+        Me.Label18.Size = New System.Drawing.Size(221, 14)
         Me.Label18.TabIndex = 35
         Me.Label18.Text = "        Water Balance Output Image Date Table"
         '
@@ -2873,7 +2873,7 @@ Partial Class Main
         Me.CoverPropertiesText.Location = New System.Drawing.Point(18, 503)
         Me.CoverPropertiesText.Name = "CoverPropertiesText"
         Me.CoverPropertiesText.ReadOnly = True
-        Me.CoverPropertiesText.Size = New System.Drawing.Size(717, 23)
+        Me.CoverPropertiesText.Size = New System.Drawing.Size(717, 20)
         Me.CoverPropertiesText.TabIndex = 32
         '
         'CoverPropertiesAdd
@@ -2900,7 +2900,7 @@ Partial Class Main
         Me.CoverSelectionBox.Location = New System.Drawing.Point(13, 186)
         Me.CoverSelectionBox.Margin = New System.Windows.Forms.Padding(10, 3, 10, 3)
         Me.CoverSelectionBox.Name = "CoverSelectionBox"
-        Me.CoverSelectionBox.Size = New System.Drawing.Size(776, 24)
+        Me.CoverSelectionBox.Size = New System.Drawing.Size(776, 22)
         Me.CoverSelectionBox.TabIndex = 9
         '
         'CoverSelectionGrid
@@ -2930,7 +2930,7 @@ Partial Class Main
         Me.Label12.Location = New System.Drawing.Point(10, 166)
         Me.Label12.Margin = New System.Windows.Forms.Padding(10, 3, 10, 3)
         Me.Label12.Name = "Label12"
-        Me.Label12.Size = New System.Drawing.Size(140, 16)
+        Me.Label12.Size = New System.Drawing.Size(107, 14)
         Me.Label12.TabIndex = 7
         Me.Label12.Text = "        Cover Selection"
         '
@@ -2998,7 +2998,7 @@ Partial Class Main
         Me.WeatherTableText.Location = New System.Drawing.Point(14, 30)
         Me.WeatherTableText.Name = "WeatherTableText"
         Me.WeatherTableText.ReadOnly = True
-        Me.WeatherTableText.Size = New System.Drawing.Size(729, 23)
+        Me.WeatherTableText.Size = New System.Drawing.Size(729, 20)
         Me.WeatherTableText.TabIndex = 37
         '
         'WeatherTableAdd
@@ -3029,7 +3029,7 @@ Partial Class Main
         Me.Label13.Location = New System.Drawing.Point(13, 10)
         Me.Label13.Margin = New System.Windows.Forms.Padding(10, 13, 10, 3)
         Me.Label13.Name = "Label13"
-        Me.Label13.Size = New System.Drawing.Size(202, 16)
+        Me.Label13.Size = New System.Drawing.Size(152, 14)
         Me.Label13.TabIndex = 35
         Me.Label13.Text = "        Weather Parameter Table"
         '
@@ -3146,7 +3146,7 @@ Partial Class Main
         Me.Label79.Location = New System.Drawing.Point(0, 2031)
         Me.Label79.Margin = New System.Windows.Forms.Padding(10, 10, 10, 3)
         Me.Label79.Name = "Label79"
-        Me.Label79.Size = New System.Drawing.Size(383, 16)
+        Me.Label79.Size = New System.Drawing.Size(290, 14)
         Me.Label79.TabIndex = 70
         Me.Label79.Text = "        Daily Actual Ending Evaporated Depth from Skin Layer"
         '
@@ -3157,7 +3157,7 @@ Partial Class Main
         Me.WeatherDailySkinEvapDepthList.FormattingEnabled = True
         Me.WeatherDailySkinEvapDepthList.HorizontalScrollbar = True
         Me.WeatherDailySkinEvapDepthList.IntegralHeight = False
-        Me.WeatherDailySkinEvapDepthList.ItemHeight = 16
+        Me.WeatherDailySkinEvapDepthList.ItemHeight = 14
         Me.WeatherDailySkinEvapDepthList.Location = New System.Drawing.Point(6, 2054)
         Me.WeatherDailySkinEvapDepthList.Name = "WeatherDailySkinEvapDepthList"
         Me.WeatherDailySkinEvapDepthList.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
@@ -3209,7 +3209,7 @@ Partial Class Main
         Me.Label46.Location = New System.Drawing.Point(0, 1868)
         Me.Label46.Margin = New System.Windows.Forms.Padding(10, 10, 10, 3)
         Me.Label46.Name = "Label46"
-        Me.Label46.Size = New System.Drawing.Size(280, 16)
+        Me.Label46.Size = New System.Drawing.Size(211, 14)
         Me.Label46.TabIndex = 66
         Me.Label46.Text = "        Daily Actual Ending Evaporated Depth"
         '
@@ -3220,7 +3220,7 @@ Partial Class Main
         Me.WeatherDailyEvaporatedDepthList.FormattingEnabled = True
         Me.WeatherDailyEvaporatedDepthList.HorizontalScrollbar = True
         Me.WeatherDailyEvaporatedDepthList.IntegralHeight = False
-        Me.WeatherDailyEvaporatedDepthList.ItemHeight = 16
+        Me.WeatherDailyEvaporatedDepthList.ItemHeight = 14
         Me.WeatherDailyEvaporatedDepthList.Location = New System.Drawing.Point(6, 1891)
         Me.WeatherDailyEvaporatedDepthList.Name = "WeatherDailyEvaporatedDepthList"
         Me.WeatherDailyEvaporatedDepthList.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
@@ -3272,7 +3272,7 @@ Partial Class Main
         Me.Label43.Location = New System.Drawing.Point(0, 1705)
         Me.Label43.Margin = New System.Windows.Forms.Padding(10, 10, 10, 3)
         Me.Label43.Name = "Label43"
-        Me.Label43.Size = New System.Drawing.Size(328, 16)
+        Me.Label43.Size = New System.Drawing.Size(252, 14)
         Me.Label43.TabIndex = 62
         Me.Label43.Text = "        Daily Actual Ending Lower Layer Soil Moisture"
         '
@@ -3283,7 +3283,7 @@ Partial Class Main
         Me.WeatherDailyThetaVList.FormattingEnabled = True
         Me.WeatherDailyThetaVList.HorizontalScrollbar = True
         Me.WeatherDailyThetaVList.IntegralHeight = False
-        Me.WeatherDailyThetaVList.ItemHeight = 16
+        Me.WeatherDailyThetaVList.ItemHeight = 14
         Me.WeatherDailyThetaVList.Location = New System.Drawing.Point(6, 1727)
         Me.WeatherDailyThetaVList.Name = "WeatherDailyThetaVList"
         Me.WeatherDailyThetaVList.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
@@ -3335,7 +3335,7 @@ Partial Class Main
         Me.Label39.Location = New System.Drawing.Point(3, 1543)
         Me.Label39.Margin = New System.Windows.Forms.Padding(10, 10, 10, 3)
         Me.Label39.Name = "Label39"
-        Me.Label39.Size = New System.Drawing.Size(225, 16)
+        Me.Label39.Size = New System.Drawing.Size(169, 14)
         Me.Label39.TabIndex = 58
         Me.Label39.Text = "        Daily Actual Ending Depletion"
         '
@@ -3346,7 +3346,7 @@ Partial Class Main
         Me.WeatherDailyDepletionList.FormattingEnabled = True
         Me.WeatherDailyDepletionList.HorizontalScrollbar = True
         Me.WeatherDailyDepletionList.IntegralHeight = False
-        Me.WeatherDailyDepletionList.ItemHeight = 16
+        Me.WeatherDailyDepletionList.ItemHeight = 14
         Me.WeatherDailyDepletionList.Location = New System.Drawing.Point(9, 1565)
         Me.WeatherDailyDepletionList.Name = "WeatherDailyDepletionList"
         Me.WeatherDailyDepletionList.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
@@ -3432,7 +3432,7 @@ Partial Class Main
         Me.Label38.Location = New System.Drawing.Point(6, 1388)
         Me.Label38.Margin = New System.Windows.Forms.Padding(10, 10, 10, 3)
         Me.Label38.Name = "Label38"
-        Me.Label38.Size = New System.Drawing.Size(221, 16)
+        Me.Label38.Size = New System.Drawing.Size(168, 14)
         Me.Label38.TabIndex = 52
         Me.Label38.Text = "        Daily Actual Irrigation Images"
         '
@@ -3443,7 +3443,7 @@ Partial Class Main
         Me.WeatherDailyIrrigationList.FormattingEnabled = True
         Me.WeatherDailyIrrigationList.HorizontalScrollbar = True
         Me.WeatherDailyIrrigationList.IntegralHeight = False
-        Me.WeatherDailyIrrigationList.ItemHeight = 16
+        Me.WeatherDailyIrrigationList.ItemHeight = 14
         Me.WeatherDailyIrrigationList.Location = New System.Drawing.Point(12, 1410)
         Me.WeatherDailyIrrigationList.Name = "WeatherDailyIrrigationList"
         Me.WeatherDailyIrrigationList.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
@@ -3461,7 +3461,7 @@ Partial Class Main
         Me.Label37.Location = New System.Drawing.Point(6, 1234)
         Me.Label37.Margin = New System.Windows.Forms.Padding(10, 10, 10, 3)
         Me.Label37.Name = "Label37"
-        Me.Label37.Size = New System.Drawing.Size(244, 16)
+        Me.Label37.Size = New System.Drawing.Size(185, 14)
         Me.Label37.TabIndex = 50
         Me.Label37.Text = "        Daily Actual Precipitation Images"
         '
@@ -3472,7 +3472,7 @@ Partial Class Main
         Me.WeatherPrecipitationDailyList.FormattingEnabled = True
         Me.WeatherPrecipitationDailyList.HorizontalScrollbar = True
         Me.WeatherPrecipitationDailyList.IntegralHeight = False
-        Me.WeatherPrecipitationDailyList.ItemHeight = 16
+        Me.WeatherPrecipitationDailyList.ItemHeight = 14
         Me.WeatherPrecipitationDailyList.Location = New System.Drawing.Point(12, 1256)
         Me.WeatherPrecipitationDailyList.Name = "WeatherPrecipitationDailyList"
         Me.WeatherPrecipitationDailyList.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
@@ -3503,7 +3503,7 @@ Partial Class Main
         Me.WeatherPressureList.FormattingEnabled = True
         Me.WeatherPressureList.HorizontalScrollbar = True
         Me.WeatherPressureList.IntegralHeight = False
-        Me.WeatherPressureList.ItemHeight = 16
+        Me.WeatherPressureList.ItemHeight = 14
         Me.WeatherPressureList.Location = New System.Drawing.Point(16, 336)
         Me.WeatherPressureList.Name = "WeatherPressureList"
         Me.WeatherPressureList.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
@@ -3521,7 +3521,7 @@ Partial Class Main
         Me.Label35.Location = New System.Drawing.Point(13, 316)
         Me.Label35.Margin = New System.Windows.Forms.Padding(10, 10, 10, 3)
         Me.Label35.Name = "Label35"
-        Me.Label35.Size = New System.Drawing.Size(292, 16)
+        Me.Label35.Size = New System.Drawing.Size(225, 14)
         Me.Label35.TabIndex = 45
         Me.Label35.Text = "        Instantaneous Surface Pressure Images"
         '
@@ -3566,7 +3566,7 @@ Partial Class Main
         Me.WeatherETInstantaneousList.FormattingEnabled = True
         Me.WeatherETInstantaneousList.HorizontalScrollbar = True
         Me.WeatherETInstantaneousList.IntegralHeight = False
-        Me.WeatherETInstantaneousList.ItemHeight = 16
+        Me.WeatherETInstantaneousList.ItemHeight = 14
         Me.WeatherETInstantaneousList.Location = New System.Drawing.Point(12, 795)
         Me.WeatherETInstantaneousList.Name = "WeatherETInstantaneousList"
         Me.WeatherETInstantaneousList.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
@@ -3584,7 +3584,7 @@ Partial Class Main
         Me.Label34.Location = New System.Drawing.Point(6, 775)
         Me.Label34.Margin = New System.Windows.Forms.Padding(10, 10, 10, 3)
         Me.Label34.Name = "Label34"
-        Me.Label34.Size = New System.Drawing.Size(371, 16)
+        Me.Label34.Size = New System.Drawing.Size(283, 14)
         Me.Label34.TabIndex = 41
         Me.Label34.Text = "        Instantaneous Reference Evapotranspiration Images"
         '
@@ -3629,7 +3629,7 @@ Partial Class Main
         Me.WeatherETDailyReferenceList.FormattingEnabled = True
         Me.WeatherETDailyReferenceList.HorizontalScrollbar = True
         Me.WeatherETDailyReferenceList.IntegralHeight = False
-        Me.WeatherETDailyReferenceList.ItemHeight = 16
+        Me.WeatherETDailyReferenceList.ItemHeight = 14
         Me.WeatherETDailyReferenceList.Location = New System.Drawing.Point(12, 948)
         Me.WeatherETDailyReferenceList.Name = "WeatherETDailyReferenceList"
         Me.WeatherETDailyReferenceList.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
@@ -3647,7 +3647,7 @@ Partial Class Main
         Me.Label33.Location = New System.Drawing.Point(6, 928)
         Me.Label33.Margin = New System.Windows.Forms.Padding(10, 10, 10, 3)
         Me.Label33.Name = "Label33"
-        Me.Label33.Size = New System.Drawing.Size(313, 16)
+        Me.Label33.Size = New System.Drawing.Size(238, 14)
         Me.Label33.TabIndex = 37
         Me.Label33.Text = "        Daily Reference Evapotranspiration Images"
         '
@@ -3692,7 +3692,7 @@ Partial Class Main
         Me.WeatherETDailyActualList.FormattingEnabled = True
         Me.WeatherETDailyActualList.HorizontalScrollbar = True
         Me.WeatherETDailyActualList.IntegralHeight = False
-        Me.WeatherETDailyActualList.ItemHeight = 16
+        Me.WeatherETDailyActualList.ItemHeight = 14
         Me.WeatherETDailyActualList.Location = New System.Drawing.Point(12, 1101)
         Me.WeatherETDailyActualList.Name = "WeatherETDailyActualList"
         Me.WeatherETDailyActualList.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
@@ -3710,7 +3710,7 @@ Partial Class Main
         Me.Label29.Location = New System.Drawing.Point(6, 1081)
         Me.Label29.Margin = New System.Windows.Forms.Padding(10, 10, 10, 3)
         Me.Label29.Name = "Label29"
-        Me.Label29.Size = New System.Drawing.Size(285, 16)
+        Me.Label29.Size = New System.Drawing.Size(217, 14)
         Me.Label29.TabIndex = 33
         Me.Label29.Text = "        Daily Actual Evapotranspiration Images"
         '
@@ -3755,7 +3755,7 @@ Partial Class Main
         Me.WeatherRadiationList.FormattingEnabled = True
         Me.WeatherRadiationList.HorizontalScrollbar = True
         Me.WeatherRadiationList.IntegralHeight = False
-        Me.WeatherRadiationList.ItemHeight = 16
+        Me.WeatherRadiationList.ItemHeight = 14
         Me.WeatherRadiationList.Location = New System.Drawing.Point(16, 642)
         Me.WeatherRadiationList.Name = "WeatherRadiationList"
         Me.WeatherRadiationList.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
@@ -3773,7 +3773,7 @@ Partial Class Main
         Me.Label27.Location = New System.Drawing.Point(10, 622)
         Me.Label27.Margin = New System.Windows.Forms.Padding(10, 10, 10, 3)
         Me.Label27.Name = "Label27"
-        Me.Label27.Size = New System.Drawing.Size(279, 16)
+        Me.Label27.Size = New System.Drawing.Size(211, 14)
         Me.Label27.TabIndex = 29
         Me.Label27.Text = "        Instantaneous Solar Radiation Images"
         '
@@ -3818,7 +3818,7 @@ Partial Class Main
         Me.WeatherWindSpeedList.FormattingEnabled = True
         Me.WeatherWindSpeedList.HorizontalScrollbar = True
         Me.WeatherWindSpeedList.IntegralHeight = False
-        Me.WeatherWindSpeedList.ItemHeight = 16
+        Me.WeatherWindSpeedList.ItemHeight = 14
         Me.WeatherWindSpeedList.Location = New System.Drawing.Point(16, 489)
         Me.WeatherWindSpeedList.Name = "WeatherWindSpeedList"
         Me.WeatherWindSpeedList.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
@@ -3836,7 +3836,7 @@ Partial Class Main
         Me.Label26.Location = New System.Drawing.Point(13, 469)
         Me.Label26.Margin = New System.Windows.Forms.Padding(10, 10, 10, 3)
         Me.Label26.Name = "Label26"
-        Me.Label26.Size = New System.Drawing.Size(259, 16)
+        Me.Label26.Size = New System.Drawing.Size(197, 14)
         Me.Label26.TabIndex = 25
         Me.Label26.Text = "        Instantaneous Wind Speed Images"
         '
@@ -3881,7 +3881,7 @@ Partial Class Main
         Me.WeatherHumidityList.FormattingEnabled = True
         Me.WeatherHumidityList.HorizontalScrollbar = True
         Me.WeatherHumidityList.IntegralHeight = False
-        Me.WeatherHumidityList.ItemHeight = 16
+        Me.WeatherHumidityList.ItemHeight = 14
         Me.WeatherHumidityList.Location = New System.Drawing.Point(16, 183)
         Me.WeatherHumidityList.Name = "WeatherHumidityList"
         Me.WeatherHumidityList.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
@@ -3899,7 +3899,7 @@ Partial Class Main
         Me.Label24.Location = New System.Drawing.Point(13, 163)
         Me.Label24.Margin = New System.Windows.Forms.Padding(10, 10, 10, 3)
         Me.Label24.Name = "Label24"
-        Me.Label24.Size = New System.Drawing.Size(288, 16)
+        Me.Label24.Size = New System.Drawing.Size(221, 14)
         Me.Label24.TabIndex = 21
         Me.Label24.Text = "        Instantaneous Specific Humidity Images"
         '
@@ -3944,7 +3944,7 @@ Partial Class Main
         Me.WeatherTemperatureList.FormattingEnabled = True
         Me.WeatherTemperatureList.HorizontalScrollbar = True
         Me.WeatherTemperatureList.IntegralHeight = False
-        Me.WeatherTemperatureList.ItemHeight = 16
+        Me.WeatherTemperatureList.ItemHeight = 14
         Me.WeatherTemperatureList.Location = New System.Drawing.Point(16, 30)
         Me.WeatherTemperatureList.Name = "WeatherTemperatureList"
         Me.WeatherTemperatureList.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
@@ -3962,7 +3962,7 @@ Partial Class Main
         Me.Label19.Location = New System.Drawing.Point(13, 10)
         Me.Label19.Margin = New System.Windows.Forms.Padding(10, 3, 10, 3)
         Me.Label19.Name = "Label19"
-        Me.Label19.Size = New System.Drawing.Size(282, 16)
+        Me.Label19.Size = New System.Drawing.Size(215, 14)
         Me.Label19.TabIndex = 17
         Me.Label19.Text = "        Instantaneous Air Temperature Images"
         '
@@ -4066,7 +4066,7 @@ Partial Class Main
         Me.OutputDirectoryTextEnergy.HideSelection = False
         Me.OutputDirectoryTextEnergy.Location = New System.Drawing.Point(16, 31)
         Me.OutputDirectoryTextEnergy.Name = "OutputDirectoryTextEnergy"
-        Me.OutputDirectoryTextEnergy.Size = New System.Drawing.Size(741, 23)
+        Me.OutputDirectoryTextEnergy.Size = New System.Drawing.Size(741, 20)
         Me.OutputDirectoryTextEnergy.TabIndex = 63
         '
         'ExitRunEnergy
@@ -4150,7 +4150,7 @@ Partial Class Main
         Me.Label16.Location = New System.Drawing.Point(13, 65)
         Me.Label16.Margin = New System.Windows.Forms.Padding(10)
         Me.Label16.Name = "Label16"
-        Me.Label16.Size = New System.Drawing.Size(132, 16)
+        Me.Label16.Size = New System.Drawing.Size(100, 14)
         Me.Label16.TabIndex = 64
         Me.Label16.Text = "        Output Images"
         '
@@ -4182,7 +4182,7 @@ Partial Class Main
         Me.Label15.Location = New System.Drawing.Point(13, 10)
         Me.Label15.Margin = New System.Windows.Forms.Padding(10, 13, 10, 3)
         Me.Label15.Name = "Label15"
-        Me.Label15.Size = New System.Drawing.Size(144, 16)
+        Me.Label15.Size = New System.Drawing.Size(110, 14)
         Me.Label15.TabIndex = 61
         Me.Label15.Text = "        Output Directory"
         '
@@ -4195,7 +4195,7 @@ Partial Class Main
         Me.OutputImagesBoxEnergy.Location = New System.Drawing.Point(16, 91)
         Me.OutputImagesBoxEnergy.Margin = New System.Windows.Forms.Padding(3, 10, 3, 10)
         Me.OutputImagesBoxEnergy.Name = "OutputImagesBoxEnergy"
-        Me.OutputImagesBoxEnergy.Size = New System.Drawing.Size(741, 218)
+        Me.OutputImagesBoxEnergy.Size = New System.Drawing.Size(741, 212)
         Me.OutputImagesBoxEnergy.TabIndex = 65
         '
         'TabPage10
@@ -4232,7 +4232,7 @@ Partial Class Main
         Me.OutputImagesBoxWater.Location = New System.Drawing.Point(16, 91)
         Me.OutputImagesBoxWater.Margin = New System.Windows.Forms.Padding(3, 10, 3, 10)
         Me.OutputImagesBoxWater.Name = "OutputImagesBoxWater"
-        Me.OutputImagesBoxWater.Size = New System.Drawing.Size(741, 218)
+        Me.OutputImagesBoxWater.Size = New System.Drawing.Size(741, 212)
         Me.OutputImagesBoxWater.TabIndex = 77
         '
         'CalculationTextWater
@@ -4268,7 +4268,7 @@ Partial Class Main
         Me.OutputDirectoryTextWater.HideSelection = False
         Me.OutputDirectoryTextWater.Location = New System.Drawing.Point(16, 31)
         Me.OutputDirectoryTextWater.Name = "OutputDirectoryTextWater"
-        Me.OutputDirectoryTextWater.Size = New System.Drawing.Size(741, 23)
+        Me.OutputDirectoryTextWater.Size = New System.Drawing.Size(741, 20)
         Me.OutputDirectoryTextWater.TabIndex = 75
         '
         'ExitRunWater
@@ -4352,7 +4352,7 @@ Partial Class Main
         Me.Label23.Location = New System.Drawing.Point(13, 65)
         Me.Label23.Margin = New System.Windows.Forms.Padding(10)
         Me.Label23.Name = "Label23"
-        Me.Label23.Size = New System.Drawing.Size(132, 16)
+        Me.Label23.Size = New System.Drawing.Size(100, 14)
         Me.Label23.TabIndex = 76
         Me.Label23.Text = "        Output Images"
         '
@@ -4384,7 +4384,7 @@ Partial Class Main
         Me.Label25.Location = New System.Drawing.Point(13, 10)
         Me.Label25.Margin = New System.Windows.Forms.Padding(10, 13, 10, 3)
         Me.Label25.Name = "Label25"
-        Me.Label25.Size = New System.Drawing.Size(144, 16)
+        Me.Label25.Size = New System.Drawing.Size(110, 14)
         Me.Label25.TabIndex = 73
         Me.Label25.Text = "        Output Directory"
         '
@@ -4457,7 +4457,7 @@ Partial Class Main
         '
         'Main
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 14.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(838, 744)
         Me.Controls.Add(Me.TabControl1)
